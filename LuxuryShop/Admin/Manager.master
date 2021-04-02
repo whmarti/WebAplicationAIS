@@ -1,0 +1,141 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Manager.master.cs" Inherits="Manager" %>
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" runat="server"   type="image/ico" sizes="32x32" href="http://localhost:53266/images/LogoPaginaTop.png">
+
+   
+    <title><%: Page.Title %> - Luxury Accessories</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+     <link href="~/images/LogoPaginaTop.png" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" >
+    <link href="https://fonts.googleapis.com/css2?family=Jura&display=swap" rel="stylesheet">
+    <link href="../styles/Style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <form runat="server" class="form1 formsMaster" >
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a  runat="server" href="../index.aspx"><img alt="Brand" class="logoMaster"  src="../images/mainlogo.png"></a>
+                </div>
+             
+                <div class="navbar-collapse collapse" style="vertical-align:middle" >
+                    <div  >
+                      <ul class="nav navbar-nav" style="padding-top: 20px;">
+                        <li><a runat="server" href="Default.aspx">Home</a></li>
+                          
+
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Users <i class='fa fa-id-badge'></i>&nbsp;<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                             <li><a href="Users.aspx"><i class='fa fa-male'></i>&nbsp;Employees</a></li>           
+                             <li><a href="Customers.aspx"><i class='fa fa-female'></i>&nbsp;Customers</a></li>           
+                          </ul>
+                         </li>
+
+
+                             <li><a href="Categories.aspx">&nbsp;<i class='fa fa-sitemap'></i>&nbsp;Categories</a></li>
+                             <li><a href="Products.aspx"><i class='fa fa-shopping-bag'></i>&nbsp;Products</a></li>   
+                             <li><a href="Orders.aspx">&nbsp;<i class='fa fa-truck'></i>&nbsp;Orders</a></li>
+                         
+                      
+                    </ul>
+                      <ul class="nav navbar-nav navbar-right" style="padding-top: 20px;">
+                                
+                          <li class="dropdown">
+                          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                              
+                               <%if (user == "")
+                                    { %> Login<%}
+                                else
+                                {%><%=user %><%} %>
+                              
+                              <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="Login.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign In</a></li> 
+                            <li><a href="Login.aspx?opt=logOut"><i class='fa fa-share'></i>&nbsp;Sign Out</a></li> 
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div class="container body-content">
+            
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+
+            <hr />
+           
+              <div class="foot">
+                <div class="cover " >
+                  <div class="col-4 child" style="padding-left:8px;" >
+                      <i class="fas fa-map-marker-alt  teal-color"></i> Fitzherbert, Palmerston North 4410 - NZ <br />
+                      <i class="fas fa-phone fa-rotate-90 text-primary"></i> +64 201 2347698<br />
+                  </div>
+                  <div class="col-4  center" style="padding-right:20px;">
+                     <i class="fas fa-shopping-bag"></i>
+                      Luxury Accessories &copy; <%: DateTime.Now.Year %><br/>
+                      Developed by William Martin <br />
+                      Contact: whmarti@hotmail.com
+                  </div>
+                  <div class=" col-4  text-right child" style="padding-right:8px;">
+                    FOLLOW US ON SOCIAL MEDIA : <br />
+                      Instagram:&nbsp;&nbsp; <a href="http://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a><br />
+                      Facebook: &nbsp;&nbsp; <a href="http://www.facebook.com" target="_blank"><i class="fab fa-facebook-square"></i></a><br />
+                      Twiteer: &nbsp;&nbsp;  <a href="https://twitter.com/home?lang=en" target="_blank"><i class="fab fa-twitter-square"></i></a>
+                  </div>
+                </div>
+               </div>  
+           
+
+        </div>
+
+
+
+    </form>
+</body>
+</html>

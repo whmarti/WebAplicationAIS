@@ -1,0 +1,27 @@
+﻿.ContImgMsg {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center
+}
+
+.ContactMsg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 892px) {
+    .ContImgMsg {
+        position: initial;
+        height: 300px;
+        display: block;
+    }
+
+    .ContactMsg {
+        display: block;
+        justify-content: center;
+        align-items: center;
+    }
+}

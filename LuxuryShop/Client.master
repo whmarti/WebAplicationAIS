@@ -1,0 +1,141 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Client.master.cs" Inherits="Client" %>
+
+<!DOCTYPE html>
+
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Luxury Accessories</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />   
+      <link href="~/images/LogoPaginaTop.png" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jura&display=swap" rel="stylesheet">
+    <link href="styles/Style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+</head>
+<body>           
+    <form runat="server" class="formsMaster">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header" style="margin-top:5px;">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+         
+        
+
+
+                    <a  runat="server" href="index.aspx"><img alt="Brand"  width ="50%" src="images/Logo4a.jpg"></a>
+                </div>
+             
+                <div class="navbar-collapse collapse" style="vertical-align:middle" >
+                    <div  >
+                      <ul class="nav navbar-nav" style="padding-top: 20px;">
+                        <li><a runat="server" href="index.aspx">Home</a></li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Products <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="Website/bag.aspx?s=b"><i class='fa fa-shopping-bag'></i>&nbsp;Bags</a></li>
+                            <li><a href="Website/bag.aspx?s=s"><span class="iconify" data-icon="emojione-monotone:womans-boot" data-inline="false"></span>&nbsp;Shoes</a></li>
+                            <li><a href="Website/bag.aspx?s=a"><span class="iconify" data-icon="ph:watch" data-inline="false"></span>&nbsp;Accessories</a></li>             
+                          </ul>
+                        </li>
+                        <li><a runat="server" href="AboutUs.aspx">About</a></li>
+                        <li><a runat="server" href="ContactUs.aspx">Contact</a></li>
+                    </ul>
+                      <ul class="nav navbar-nav navbar-right" style="padding-top: 20px;">
+                                
+                          <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="Website/Login.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign In</a></li>
+                            <li><a href="Website/Register.aspx"><i class='fa fa-id-card'></i>&nbsp;Register</a></li>   
+                            <li><a href="Website/Login.aspx?opt=logOut"><i class='fa fa-share'></i>&nbsp;Sign Out</a></li> 
+                          </ul>
+                        </li>
+                        <li><a runat="server" href="Website/Car.aspx"><i class="fa fa-shopping-cart " ></i>&nbsp;Car</a></li>
+                     </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+      <div class="row">
+              <%--  <asp:SiteMapPath ID="SiteMapPath1" runat="server" SiteMapProvider="LuxuryMap" Font-Names="Verdana" Font-Size="0.8em" PathSeparator=" : ">
+                        <CurrentNodeStyle ForeColor="#333333" />
+                        <NodeStyle Font-Bold="True" ForeColor="#7C6F57" />
+                        <PathSeparatorStyle Font-Bold="True" ForeColor="#5D7B9D" />
+                        <RootNodeStyle Font-Bold="True" ForeColor="#5D7B9D" />
+                    </asp:SiteMapPath> --%>
+       
+
+  
+
+
+     </div> 
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+
+            <hr />
+           
+              <div class="foot">
+                <div class="cover " >
+                  <div class="col-4 child" style="padding-left:8px;">
+                      <i class="fas fa-map-marker-alt  teal-color"></i> Fitzherbert, Palmerston North 4410 - NZ<br />
+                      <i class="fas fa-phone fa-rotate-90 text-primary"></i> +64 201 2347698<br />
+                  </div>
+                  <div class="col-4  center" style="padding-right:20px;">
+                     <i class="fas fa-shopping-bag"></i>
+                      Luxury Accessories &copy; <%: DateTime.Now.Year %><br/>
+                      Developed by William Martin <br />
+                      Contact: whmarti@hotmail.com
+                  </div>
+                  <div class=" col-4  text-right child" style="padding-right:8px;" >
+                    FOLLOW US ON SOCIAL MEDIA : <br />
+                      Instagram:&nbsp;&nbsp; <a href="http://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a><br />
+                      Facebook: &nbsp;&nbsp; <a href="http://www.facebook.com" target="_blank"><i class="fab fa-facebook-square"></i></a><br />
+                      Twiteer: &nbsp;&nbsp;  <a href="https://twitter.com/home?lang=en" target="_blank"><i class="fab fa-twitter-square"></i></a>
+                  </div>
+                </div>
+               </div>  
+           
+
+        </div>
+
+
+
+    </form>
+</body>
+</html>
