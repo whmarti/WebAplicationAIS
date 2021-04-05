@@ -22,7 +22,7 @@ public partial class Admin_User : System.Web.UI.Page
     private UserBL userBL;
     private User user;
     public String titUser = "Update Employee";
-    String _msg = "", pgUsrBack="Users.aspx";
+    String _msg = "", pgUsrBack = "Users.aspx";
     protected void Page_Load(object sender, EventArgs e)
     {
         mError = new mError("", "");
@@ -33,10 +33,10 @@ public partial class Admin_User : System.Web.UI.Page
             if (!IsPostBack)
             {
                 lblTitUser.Text = titUser;
-                if (Request.QueryString["Id"]!=null)
-                FillData(Convert.ToInt32(Request.QueryString["Id"]));                
+                if (Request.QueryString["Id"] != null)
+                    FillData(Convert.ToInt32(Request.QueryString["Id"]));
             }
-            if (mError.code == "1" )
+            if (mError.code == "1")
             {
                 Response.Write("Error DB: " + mError.mssg);
                 throw new Exception("Error DB: " + mError.mssg);
@@ -53,7 +53,7 @@ public partial class Admin_User : System.Web.UI.Page
             Response.Redirect(pagErr);
         }
     }
-    
+
     /// <summary>
     /// Function that invokes the logic layer to to bring the category information.
     /// </summary>
@@ -63,7 +63,7 @@ public partial class Admin_User : System.Web.UI.Page
             lblTitUser.Text = "Update Customer";
         user = new User();
         userBL = new UserBL();
-        user = userBL.getUserBL(pIdUser,ref mError);
+        user = userBL.getUserBL(pIdUser, ref mError);
         if (user != null)
         {
             IdUser.Value = user.IdUser.ToString();
@@ -72,8 +72,10 @@ public partial class Admin_User : System.Web.UI.Page
             name.Text = user.name.Trim();
             lastName.Text = user.lastName.Trim();
             email.Text = user.email.Trim();
-            phone.Text= user.phone.Trim();
+            phone.Text = user.phone.Trim();
             address.Text = user.address.Trim();
+            FillStates();
+            ddlState.SelectedValue = user.state;
             pass.Text = user.pass.Trim();
             passwordRe.Text = user.pass.Trim();
             pass.Attributes["type"] = "password";
@@ -87,44 +89,55 @@ public partial class Admin_User : System.Web.UI.Page
     }
 
     /// <summary>
+    /// Function that fills the states to state control.
+    /// </summary>
+    protected void FillStates(){
+        ddlState.Items.Add(new System.Web.UI.WebControls.ListItem("Pending", "Pending"));
+        ddlState.Items.Add(new System.Web.UI.WebControls.ListItem("Active", "Active"));
+        ddlState.Items.Add(new System.Web.UI.WebControls.ListItem("Inactive", "Inactive"));
+    }
+    /// <summary>
     /// Function that invokes the logic layer to update the registry.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     protected void Update_Click(object sender, EventArgs e)
     {
-        try {           
-
-            String _msg = "<strong> User </strong> updated <strong> successfully! </strong>";
-            user = new User();
-            user.IdUser = Convert.ToInt32(IdUser.Value);
-            user.name = name.Text.Trim();
-            user.type = typeUser.Value.Trim();
-            user.lastName =lastName.Text.Trim();
-            user.email = email.Text.Trim();
-            user.phone = phone.Text.Trim();
-            user.pass = pass.Text.Trim();
-            user.address = address.Text.Trim();
-            userBL = new UserBL();
-            btnSave.Enabled = false;
-            userBL.CRUDUserBL(user, "UPD",ref mError);
-            if (mError.code == "1")
+        try {
+            if (Page.IsValid)
             {
-                _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
-                ShowMessage(_msg, WarningType.Danger);
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                ShowMessage(_msg, WarningType.Success);
-                if(Session["typeUser"].ToString() =="Client")
-                    pgUsrBack="Customers.aspx";
-                Response.AddHeader("REFRESH", "3;URL='"+ pgUsrBack +"'");
-            }
-            if (mError.code != "1" && mError.code != "")
-            {
+                String _msg = "<strong> User </strong> updated <strong> successfully! </strong>";
+                user = new User();
+                user.IdUser = Convert.ToInt32(IdUser.Value);
+                user.name = name.Text.Trim();
+                user.type = typeUser.Value.Trim();
+                user.lastName = lastName.Text.Trim();
+                user.email = email.Text.Trim();
+                user.phone = phone.Text.Trim();
+                user.pass = pass.Text.Trim();
+                user.address = address.Text.Trim();
+                user.state = ddlState.SelectedValue;
+                userBL = new UserBL();
+                btnSave.Enabled = false;
+                userBL.CRUDUserBL(user, "UPD", ref mError);
+                if (mError.code == "1")
+                {
+                    _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
+                    ShowMessage(_msg, WarningType.Danger);
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    ShowMessage(_msg, WarningType.Success);
+                    if (Session["typeUser"].ToString() == "Client")
+                        pgUsrBack = "Customers.aspx";
+                    Response.AddHeader("REFRESH", "3;URL='" + pgUsrBack + "'");
+                }
+                if (mError.code != "1" && mError.code != "")
+                {
                     Response.Write("Error DB: " + mError.mssg);
                     throw new Exception("Error DB: " + mError.mssg);
+                }
             }
         }
         catch (Exception ex)

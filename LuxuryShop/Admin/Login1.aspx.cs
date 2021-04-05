@@ -18,6 +18,7 @@ public partial class Admin_Login : System.Web.UI.Page
     private readonly String pagDefaultM = ConfigurationManager.AppSettings["pagDefaultM"];
     private readonly String pagLogin = ConfigurationManager.AppSettings["pagLoginM"];
     private readonly String cookUser = ConfigurationManager.AppSettings["cookUser"];
+    private readonly String sessionUser = ConfigurationManager.AppSettings["sessionUser"];
     private static readonly String cookDateCreate = ConfigurationManager.AppSettings["cookDateCreate"];
     private string pagErr = ConfigurationManager.AppSettings["pagError"];
     private mError mError;
@@ -30,6 +31,7 @@ public partial class Admin_Login : System.Web.UI.Page
         mError = new mError("","");
         
         mpageRed = Request.QueryString["pag"] != null ? Request.QueryString["pag"].ToString() : pagDefaultM;
+        lkForgot.NavigateUrl = Request.QueryString["pag"] != null ? "getPassword.aspx?pag="+ mpageRed : "getPassword.aspx";
         if (!IsPostBack)
         {
 
@@ -72,15 +74,27 @@ public partial class Admin_Login : System.Web.UI.Page
             }
             else
             {
-                Tools.CreateCookie(cookUser, user.name + " " + user.lastName);              
+                if (user.state != "Active")
+                {
+                    if (user.state == "Pending")
+                    { mError.mssg = "Your account is pending for authorization.Try later.";}                     
+                    else { mError.mssg = "Your account is inactive. Please contact the administration."; }
 
-                _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong> access successfully! ";
-                ShowMessage(_msg, WarningType.Success);
-                //Response.AddHeader("REFRESH", "3;URL='" + mpageRed + "'");
-                
-                string _script = "$('#cover-spin').hide();";
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
-                Response.Redirect("~/Admin/" + mpageRed, false);
+                    btnLogin.Enabled = true;
+                    _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong>. "+ mError.mssg;
+                    ShowMessage(_msg, WarningType.Warning);
+                    string _script = "$('#cover-spin').hide();";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
+                }
+                else {
+                    Tools.CreateCookie(cookUser, user.name + " " + user.lastName);
+                    Tools.CreateCookie(sessionUser, user.IdUser.ToString());
+                    _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong> access successfully! ";
+                    ShowMessage(_msg, WarningType.Success);
+                    string _script = "$('#cover-spin').hide();";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
+                    Response.Redirect("~/Admin/" + mpageRed, false);
+                }
             }
             if (mError.code != "1" && mError.code != "")
             {

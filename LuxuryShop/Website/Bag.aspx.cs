@@ -300,12 +300,13 @@ public partial class Website_Bag : System.Web.UI.Page
         return Convert.ToInt32(Tools.GetCookie(_sessionClient).Value); 
     }
     #endregion
+
     /// <summary>
     /// Functoin that generate visit record of the day
     /// </summary>
     /// <param name=""></param>
     private void ValidateVisit(String pSessionClient) {
-        string _date = String.Format("{0}/{1}/{2}", DateTime.Now.Day.ToString("00"), DateTime.Now.Month.ToString("00"), DateTime.Now.Year);
+        string _date = String.Format("{0}-{1}-{2}", DateTime.Now.Year, DateTime.Now.Month.ToString("00"), DateTime.Now.Day.ToString("00"));
         UserBL _userBL;
         Visit _visit;
         if (!(Tools.ValidateCookie(cookClientVisit)) ) {
@@ -317,6 +318,7 @@ public partial class Website_Bag : System.Web.UI.Page
             _userBL.CRUDVisitBL(_visit, "INS", ref mError);
          }
     }
+
     /// <summary>
     /// Web method that invokes the logic layer to insert the chosen item into the shopping cart.
     /// </summary>

@@ -17,7 +17,8 @@ namespace LuxuryShop
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login")
+                //LoginPath = new PathString("/Account/Login")
+                LoginPath = new PathString("/Account/401")
             });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 

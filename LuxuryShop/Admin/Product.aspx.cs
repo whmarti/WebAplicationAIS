@@ -126,79 +126,81 @@ public partial class Admin_Product : System.Web.UI.Page
     protected void Update_Click(object sender, EventArgs e)
     {
         try {
+            if (Page.IsValid)
+            {
+                string _fileName = "";
+                string _fileNameD = "";
+                string _savepath = "";
+                string _savefile = "";
+                HttpPostedFile _file = photo.PostedFile;
+                int _fileSizeInBytes = _file.ContentLength;
+                string _fileExtension = "";
+                _fileName = _file.FileName;
+                if (!string.IsNullOrEmpty(_fileName))
+                {
+                    _fileExtension = Path.GetExtension(_fileName);
+                    _savepath = Server.MapPath("~") + dirSavePhoto;
+                    _savefile = Path.Combine(_savepath, _file.FileName);
+                    _file.SaveAs(_savefile);
+                }
+                _file = photoD.PostedFile;
+                _fileSizeInBytes = _file.ContentLength;
+                _fileNameD = _file.FileName;
+                if (!string.IsNullOrEmpty(_fileNameD))
+                {
+                    _fileExtension = Path.GetExtension(_fileNameD);
+                    _savepath = Server.MapPath("~") + dirSavePhoto;
+                    _savefile = Path.Combine(_savepath, _file.FileName);
+                    _file.SaveAs(_savefile);
+                }
 
-            string _fileName = "";
-            string _fileNameD = "";
-            string _savepath = "";
-            string _savefile = "";
-            HttpPostedFile _file = photo.PostedFile; 
-            int _fileSizeInBytes = _file.ContentLength;            
-            string _fileExtension = "";
-            _fileName = _file.FileName;
-            if (!string.IsNullOrEmpty(_fileName))
-            {
-                _fileExtension = Path.GetExtension(_fileName);
-                _savepath = Server.MapPath("~")+dirSavePhoto;
-                _savefile = Path.Combine(_savepath, _file.FileName);
-                _file.SaveAs(_savefile);
-            }
-            _file = photoD.PostedFile;
-            _fileSizeInBytes = _file.ContentLength;
-            _fileNameD = _file.FileName;
-            if (!string.IsNullOrEmpty(_fileNameD))
-            {
-                _fileExtension = Path.GetExtension(_fileNameD);
-                _savepath = Server.MapPath("~") + dirSavePhoto;
-                _savefile = Path.Combine(_savepath, _file.FileName);
-                _file.SaveAs(_savefile);
-            }
+                String _msg = "<strong> Product </strong> updated <strong> successfully! </strong>";
+                int _monthDcto = 0;
+                product = new Product();
+                product.IdProduct = Convert.ToInt32(IdProduct.Value);
+                product.IdCategory = Convert.ToInt32(ddlIdCategory.SelectedValue);
+                product.name = name.Text.Trim();
+                product.stock = Convert.ToInt32(stock.Text);
+                product.color = color.Text.Trim();
+                product.brand = brand.Text.Trim();
+                product.size = size.Text.Trim();
+                if (_fileName == "")
+                    product.photo = lblphoto.Text == "" ? defaultPhoto : lblphoto.Text.Trim();
+                else
+                    product.photo = _fileName;
+                if (_fileNameD == "")
+                    product.photoD = lblphotoD.Text == "" ? defaultPhoto : lblphotoD.Text.Trim();
+                else
+                    product.photoD = _fileNameD;
 
-            String _msg = "<strong> Product </strong> updated <strong> successfully! </strong>";
-            int _monthDcto = 0;
-            product = new Product();
-            product.IdProduct = Convert.ToInt32(IdProduct.Value);
-            product.IdCategory = Convert.ToInt32(ddlIdCategory.SelectedValue);
-            product.name = name.Text.Trim();
-            product.stock = Convert.ToInt32(stock.Text);
-            product.color = color.Text.Trim();
-            product.brand = brand.Text.Trim();
-            product.size = size.Text.Trim();
-            if (_fileName == "")
-                product.photo = lblphoto.Text == "" ? defaultPhoto : lblphoto.Text.Trim();
-            else
-                product.photo = _fileName;
-            if (_fileNameD == "")
-                product.photoD = lblphotoD.Text == "" ? defaultPhoto : lblphotoD.Text.Trim();
-            else
-                product.photoD = _fileNameD;
-          
-            product.price = (float)Convert.ToDouble(price.Text);
-            product.discount = (float)Convert.ToDouble(discount.Text);
-            _monthDcto = Convert.ToInt32(ddlmonth.SelectedValue);
-            if (!((float)Convert.ToDouble(discount.Text)>0) || ddlmonth.SelectedValue=="0")
-            {
-                product.discount = 0;
-                _monthDcto = 0;
-            }
-            product.monthDcto = _monthDcto;
-            prodBL = new ProductBL();
-            btnSave.Enabled = false;
-            prodBL.CRUDProductBL(product, "UPD",ref mError);
-            if (mError.code == "1")
-            {
-                _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
-                ShowMessage(_msg, WarningType.Danger);
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                ShowMessage(_msg, WarningType.Success);
-                Response.AddHeader("REFRESH", "3;URL='Products.aspx'");
-            }
-            if (mError.code != "1" && mError.code != "")
-            {
+                product.price = (float)Convert.ToDouble(price.Text);
+                product.discount = (float)Convert.ToDouble(discount.Text);
+                _monthDcto = Convert.ToInt32(ddlmonth.SelectedValue);
+                if (!((float)Convert.ToDouble(discount.Text) > 0) || ddlmonth.SelectedValue == "0")
+                {
+                    product.discount = 0;
+                    _monthDcto = 0;
+                }
+                product.monthDcto = _monthDcto;
+                prodBL = new ProductBL();
+                btnSave.Enabled = false;
+                prodBL.CRUDProductBL(product, "UPD", ref mError);
+                if (mError.code == "1")
+                {
+                    _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
+                    ShowMessage(_msg, WarningType.Danger);
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    ShowMessage(_msg, WarningType.Success);
+                    Response.AddHeader("REFRESH", "3;URL='Products.aspx'");
+                }
+                if (mError.code != "1" && mError.code != "")
+                {
                     Response.Write("Error DB: " + mError.mssg);
                     throw new Exception("Error DB: " + mError.mssg);
+                }
             }
         }
         catch (Exception ex)

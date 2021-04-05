@@ -18,6 +18,7 @@ public partial class Admin_Products : System.Web.UI.Page
     private readonly String pagLogin = ConfigurationManager.AppSettings["pagLoginM"];
     private readonly String pagErr = ConfigurationManager.AppSettings["pagError"];
     private readonly String cookUser = ConfigurationManager.AppSettings["cookUser"];
+    private readonly String usrAccountAuth = ConfigurationManager.AppSettings["usrAccountAuth"];
     private readonly String Authentication = ConfigurationManager.AppSettings["Authentication"];
     private const String currentPage = "Products.aspx";
     private ProductBL prodBL;

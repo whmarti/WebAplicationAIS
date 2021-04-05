@@ -33,10 +33,15 @@
         <Columns>
             
     <asp:HyperLinkField DataTextField="name" DataNavigateUrlFields="IdUser" DataNavigateUrlFormatString="User.aspx?Id={0}"
-             ItemStyle-Width = "30%" HeaderText="Name" />
-      <asp:BoundField DataField="lastName" HeaderText="Last Name" ItemStyle-Width = "28%" />
-      <asp:BoundField DataField="email" HeaderText="Email" ItemStyle-Width = "28%" />      
-      <asp:BoundField DataField="type" HeaderText="Type" ItemStyle-Width = "5%" />
+             ItemStyle-Width = "23%" HeaderText="Name" />
+      <asp:BoundField DataField="lastName" HeaderText="Last Name" ItemStyle-Width = "23%" />
+      <asp:BoundField DataField="email" HeaderText="Email" ItemStyle-Width = "31%" />  
+      <asp:TemplateField ItemStyle-HorizontalAlign="Center" ItemStyle-Width = "6%"><HeaderTemplate><center>State</center></HeaderTemplate>
+         <ItemTemplate>  
+          <%#  (Eval("state").ToString() =="Pending")? "<i class='fa fa-eercast' style='color:yellow'></i>":(Eval("state").ToString() =="Inactive")? "<i class='fa fa-eercast' style='color:red'></i>": "<i class='fa fa-eercast' style='color:green'></i>"%>
+         </ItemTemplate>
+      </asp:TemplateField>
+      <asp:BoundField DataField="type" HeaderText="Type" ItemStyle-Width = "6%" />
       <asp:TemplateField ItemStyle-HorizontalAlign="Center"><HeaderTemplate><center><i class='fas fa-trash'></i>&nbspDelete</center></HeaderTemplate>
             <ItemTemplate>
                 <asp:LinkButton ID="Del" CommandArgument='<%#  Bind("IdUser") %>'  Text="<i class='fas fa-eraser'></i>" runat="server" OnClientClick="return confirm('Are you sure want to delete the current record ?')" OnClick="gvRemUsers_Click" ItemStyle-Width = "1" />

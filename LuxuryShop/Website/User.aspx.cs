@@ -20,6 +20,7 @@ public partial class Admin_User : System.Web.UI.Page
     private readonly String cookClient = ConfigurationManager.AppSettings["cookClient"];
     private readonly String Authentication = ConfigurationManager.AppSettings["Authentication"];
     private readonly String sessionClient = ConfigurationManager.AppSettings["sessionClient"];
+    private readonly String Passkey = ConfigurationManager.AppSettings["Passkey"];
     private const String currentPage = "User.aspx";
     private mError mError;
     private UserBL userBL;
@@ -83,8 +84,8 @@ public partial class Admin_User : System.Web.UI.Page
             email.Text = user.email.Trim();
             phone.Text= user.phone.Trim();
             address.Text = user.address.Trim();
-            pass.Text = user.pass.Trim();
-            passwordRe.Text = user.pass.Trim();
+            pass.Text = Passkey.Trim();
+            passwordRe.Text = Passkey.Trim();
             pass.Attributes["type"] = "password";
             passwordRe.Attributes["type"] = "password";            
         }
@@ -114,6 +115,7 @@ public partial class Admin_User : System.Web.UI.Page
             user.phone = phone.Text.Trim();
             user.pass = pass.Text.Trim();
             user.address = address.Text.Trim();
+            user.state = state.Value;
             userBL = new UserBL();
             btnSave.Enabled = false;
             userBL.CRUDUserBL(user, "UPD",ref mError);

@@ -17,6 +17,8 @@ namespace DataAccess
     public class UserDA
     {
         private static string strConn = ConfigurationManager.AppSettings["DataBase"].ToString();
+        private readonly String EncryptClient = ConfigurationManager.AppSettings["EncryptClient"];
+        private readonly String Passkey = ConfigurationManager.AppSettings["Passkey"];
 
         /// <summary>
         /// Request for User table information to the Data Base.
@@ -47,7 +49,7 @@ namespace DataAccess
                         _newUser.lastName = Convert.ToString(_rstReader["lastName"]).Trim();
                         _newUser.email = Convert.ToString(_rstReader["email"]).Trim();
                         _newUser.phone = Convert.ToString(_rstReader["phone"]).Trim();
-                        _newUser.pass = Convert.ToString(_rstReader["pass"]).Trim();
+                        //_newUser.pass = Convert.ToString(_rstReader["pass"]).Trim();
                         _newUser.date = Convert.ToString(_rstReader["date"]).Trim();
                         _users.Add(_newUser);
 
@@ -95,8 +97,9 @@ namespace DataAccess
                         _newUser.lastName = Convert.ToString(_rstReader["lastName"]).Trim();
                         _newUser.email = Convert.ToString(_rstReader["email"]).Trim();
                         _newUser.phone = Convert.ToString(_rstReader["phone"]).Trim();
-                        _newUser.pass = Convert.ToString(_rstReader["pass"]).Trim();
+                        //_newUser.pass = Convert.ToString(_rstReader["pass"]).Trim();
                         _newUser.date = Convert.ToString(_rstReader["date"]).Trim();
+                        _newUser.state = Convert.ToString(_rstReader["state"]).Trim();
                         _users.Add(_newUser);
 
                     }
@@ -170,7 +173,7 @@ namespace DataAccess
         {
             User _user = null;
             SqlDataReader _rstReader = null;
-            string _sql = "select * from UserWeb where email=@email and pass=@pass and type=@type";            
+            string _sql = "select * from UserWeb where email=@email and type=@type and pass=HASHBYTES('SHA2_512', @pass+CAST(@salt AS NVARCHAR(36))) ";            
 
             try
             {
@@ -180,6 +183,7 @@ namespace DataAccess
                     _cmd.Parameters.AddWithValue("@email", pUser);
                     _cmd.Parameters.AddWithValue("@pass", pPass);
                     _cmd.Parameters.AddWithValue("@type", pType);
+                    _cmd.Parameters.AddWithValue("@salt", EncryptClient);
                     _conn.Open();
                     _rstReader = _cmd.ExecuteReader();
                     if (_rstReader.Read())
@@ -193,8 +197,9 @@ namespace DataAccess
                         _user.email = Convert.ToString(_rstReader["email"]).Trim();
                         _user.phone = Convert.ToString(_rstReader["phone"]).Trim();
                         _user.address = Convert.ToString(_rstReader["address"]).Trim();
-                        _user.pass = Convert.ToString(_rstReader["pass"]).Trim();
+                        //_user.pass = Convert.ToString(_rstReader["pass"]).Trim();
                         _user.date = Convert.ToString(_rstReader["date"]).Trim();
+                        _user.state = Convert.ToString(_rstReader["state"]).Trim();
 
                     }
                     else
@@ -241,7 +246,8 @@ namespace DataAccess
                         _user.email = Convert.ToString(_rstReader["email"]).Trim();
                         _user.address = Convert.ToString(_rstReader["address"]).Trim();
                         _user.phone = Convert.ToString(_rstReader["phone"]).Trim();
-                        _user.pass = Convert.ToString(_rstReader["pass"]).Trim();
+                        _user.pass = Passkey;// Convert.ToString(_rstReader["password"]).Trim();
+                        _user.state = Convert.ToString(_rstReader["state"]).Trim();
 
                     }
 
@@ -289,6 +295,7 @@ namespace DataAccess
                         _user.address = Convert.ToString(_rstReader["address"]).Trim();
                         _user.phone = Convert.ToString(_rstReader["phone"]).Trim();
                         _user.pass = Convert.ToString(_rstReader["pass"]).Trim();
+                        _user.state = Convert.ToString(_rstReader["state"]).Trim();
                         _users.Add(_user);
                     }
 
@@ -326,6 +333,9 @@ namespace DataAccess
                     new SqlParameter { ParameterName = "@phone",  Value = pUser.phone, Direction = System.Data.ParameterDirection.Input },
                     new SqlParameter { ParameterName = "@address",  Value = pUser.address, Direction = System.Data.ParameterDirection.Input },
                     new SqlParameter { ParameterName = "@pass",  Value = pUser.pass, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@state",  Value = pUser.state, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@salt",  Value = EncryptClient, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@passkey",  Value = Passkey, Direction = System.Data.ParameterDirection.Input },
                     new SqlParameter { ParameterName = "@oper",  Value = pOper, Direction = System.Data.ParameterDirection.Input },
 
                     new SqlParameter(_strOut, SqlDbType.NChar) { Size = 300, Direction = System.Data.ParameterDirection.Output }
@@ -356,6 +366,59 @@ namespace DataAccess
                         pMError.code = "1";
                         pMError.mssg = _res.Substring(2);
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                pMError.code = "1";
+                pMError.mssg = ex.Message;
+            }
+            return _pos;
+        }
+
+        public int UPD_Pass_User(String pEmail, String pPass, ref mError pMError)
+        {
+            string _sql = "Sproc_UPD_Pass_User";
+            string _strOut = "@P_Mensaje", _res = "";
+            int _pos = 0;
+            SqlParameter[] sqlParams;
+            sqlParams = new SqlParameter[]
+            {
+                   
+                    new SqlParameter { ParameterName = "@email",  Value = pEmail, Direction = System.Data.ParameterDirection.Input },                    
+                    new SqlParameter { ParameterName = "@pass",  Value = pPass, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@salt",  Value = EncryptClient, Direction = System.Data.ParameterDirection.Input },
+
+                    new SqlParameter(_strOut, SqlDbType.NChar) { Size = 300, Direction = System.Data.ParameterDirection.Output }
+
+            };
+
+            try
+            {
+                using (SqlConnection _conn = new SqlConnection(strConn))
+                {
+                    SqlCommand cmd = new SqlCommand(_sql, _conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    foreach (var item in sqlParams)
+                    {
+                        cmd.Parameters.Add(item);
+                    }
+
+
+                    _conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    _res = cmd.Parameters[_strOut].Value.ToString();
+                    _conn.Close();
+                    _pos = _res.IndexOf("1;", 0);
+                    if (_pos >= 0)
+                    {
+                        //_pos = Convert.ToInt32(_res.Substring(2));
+                        pMError.code = "1";
+                        pMError.mssg = _res.Substring(2);
+                    }
+                    else
+                        _pos= Convert.ToInt32(_res.Substring(2));
                 }
             }
             catch (Exception ex)

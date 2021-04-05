@@ -10,6 +10,7 @@ using Entity;
 using System;
 using System.Configuration;
 using System.Linq;
+using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -20,6 +21,8 @@ public partial class Admin_Users : System.Web.UI.Page
     private readonly String pagLogin = ConfigurationManager.AppSettings["pagLoginM"];
     private readonly String pagErr = ConfigurationManager.AppSettings["pagError"];
     private readonly String cookUser = ConfigurationManager.AppSettings["cookUser"];
+    private readonly String usrAccountAuth = ConfigurationManager.AppSettings["usrAccountAuth"];
+    private readonly String sessionUser = ConfigurationManager.AppSettings["sessionUser"];
     private readonly String Authentication = ConfigurationManager.AppSettings["Authentication"];
     private String currentPage = "Users.aspx", typeUser="Admin";
     private UserBL userBL;
@@ -31,7 +34,7 @@ public partial class Admin_Users : System.Web.UI.Page
         mError = new mError("","");
         HideMessage();
         
-        if (!(Tools.ValidateCookie(cookUser)) && Authentication == "1")
+        if (!(Tools.ValidateCookie(usrAccountAuth)) && Authentication == "1")
             Response.Redirect(pagLogin + "?pag=" + currentPage);
         try { 
             if (!IsPostBack)
@@ -200,14 +203,24 @@ public partial class Admin_Users : System.Web.UI.Page
     /// <param name="pId"></param>
     protected void DeleteData(int pId)
     {
+        String _msg = "<strong> User </strong> deleted <strong> successfully! </strong>";
         try
         {
+            HttpCookie rqstCookie = Tools.GetCookie(sessionUser);
+            int _idUser = Convert.ToInt32(rqstCookie.Value);
+            if (pId== _idUser)
+            {
+                _msg = "<strong> Error! </strong> Your own user can not be deleted.";
+                ShowMessage(_msg, WarningType.Danger);
+                return;
+            }
 
-            String _msg = "<strong> User </strong> deleted <strong> successfully! </strong>";
+            
             userBL = new UserBL();
             User _user = new User();
             _user.user();
             _user.IdUser = pId;
+            _user.state = "Deleted";
             userBL.CRUDUserBL(_user, "DEL", ref mError);
             if (mError.code == "1")
             {

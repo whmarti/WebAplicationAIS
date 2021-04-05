@@ -89,9 +89,13 @@
                                 {%><%=user %><%} %>
                               
                               <span class="caret"></span></a>
-                          <ul class="dropdown-menu">
-                            <li><a href="Login.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign In</a></li> 
-                            <li><a href="Login.aspx?opt=logOut"><i class='fa fa-share'></i>&nbsp;Sign Out</a></li> 
+                          <ul class="dropdown-menu">  
+                           <%if (user == ""){ %> 
+                              <li><a href="/Account/Login.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign In</a></li> 
+                              <li><a href="/Account/Register.aspx"><i class='fa fa-id-card'></i>&nbsp;Register</a></li> <%} 
+                             else {%>  
+                               <li><a href="/Account/Login.aspx?opt=logOut"><i class='fa fa-share'></i>&nbsp;Sign Out</a></li> 
+                               <%} %> 
                           </ul>
                         </li>
                       </ul>

@@ -54,35 +54,39 @@ public partial class Website_Register : System.Web.UI.Page
     {
         try
         {
-            String _msg= "<strong> User </strong>  logged in <strong> successfully! </strong>";
-            int _userId;
-            user = new User();
-            user.name = UserName.Text.Trim();
-            user.lastName=lastName.Text.Trim();
-            user.email=email.Text.Trim();
-            user.phone=phone.Text.Trim();
-            user.pass=Password.Text.Trim();
-            user.address = address.Text.Trim();
+            if (Page.IsValid)
+            {
+                String _msg = "<strong> User </strong>  logged in <strong> successfully! </strong>";
+                int _userId;
+                user = new User();
+                user.name = UserName.Text.Trim();
+                user.lastName = lastName.Text.Trim();
+                user.email = email.Text.Trim();
+                user.phone = phone.Text.Trim();
+                user.pass = Password.Text.Trim();
+                user.address = address.Text.Trim();
+                user.state = "Pending";
 
-            user.type = "Client";
-            userBL = new UserBL();
-            btnSave.Enabled = false;
-            _userId = userBL.CRUDUserBL(user,"INS",ref mError);
-            if (mError.code == "1")
-            {
-                _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
-                ShowMessage(_msg, WarningType.Danger);
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                ShowMessage(_msg, WarningType.Success);
-                Response.AddHeader("REFRESH", "4;URL='/index.aspx'");
-            }
-            if (mError.code != "1" && mError.code != "")
-            {
-                Response.Write("Error DB: " + mError.mssg);
-                throw new Exception("Error DB: " + mError.mssg);
+                user.type = "Client";
+                userBL = new UserBL();
+                btnSave.Enabled = false;
+                _userId = userBL.CRUDUserBL(user, "INS", ref mError);
+                if (mError.code == "1")
+                {
+                    _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
+                    ShowMessage(_msg, WarningType.Danger);
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    ShowMessage(_msg, WarningType.Success);
+                    Response.AddHeader("REFRESH", "4;URL='/index.aspx'");
+                }
+                if (mError.code != "1" && mError.code != "")
+                {
+                    Response.Write("Error DB: " + mError.mssg);
+                    throw new Exception("Error DB: " + mError.mssg);
+                }
             }
         }
         catch (Exception ex)

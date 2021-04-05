@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Admin/Manager.master" AutoEventWireup="true" CodeFile="Login.aspx.cs" Inherits="Admin_Login" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Client.master" AutoEventWireup="true" CodeFile="Login.aspx.cs" Inherits="Admin_Login" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" Runat="Server">
      <div class="row">
@@ -30,7 +30,8 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
+                        <div class="col-md-offset-2 col-md-10"><asp:HyperLink ID="lkForgot" runat="server">Forgot the password?</asp:HyperLink> | <a href="Register.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign Up</a>
+
                             <asp:Button runat="server"   Text="Login" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="Login_Click" CssClass="btn btn-default" style="float: right" ID="btnLogin" />
                         </div>
                     </div>

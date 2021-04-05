@@ -21,8 +21,10 @@ public partial class Website_Car : System.Web.UI.Page
     private readonly String pagErr = "../" + ConfigurationManager.AppSettings["pagError"];
     private readonly String cookClient = ConfigurationManager.AppSettings["cookClient"];
     private readonly String cookAddrClient = ConfigurationManager.AppSettings["cookAddrClient"];
+    private readonly String cookClientVisit = ConfigurationManager.AppSettings["cookClientVisit"];
+    private readonly String stateCliente = ConfigurationManager.AppSettings["stateCliente"];
     private readonly String Authentication = ConfigurationManager.AppSettings["Authentication"]; 
-    public String dirPhoto = ConfigurationManager.AppSettings["dirPhoto"], addrCliente = "";
+    public String dirPhoto = ConfigurationManager.AppSettings["dirPhoto"], addrCliente = "", state_Cliente="";
     private readonly String sessionClient = ConfigurationManager.AppSettings["sessionClient"];
     private readonly String pagSizeCli = ConfigurationManager.AppSettings["pagSizeCli"];
     private const String currentPage = "Car.aspx";
@@ -39,10 +41,13 @@ public partial class Website_Car : System.Web.UI.Page
        
         if ((!(Tools.ValidateCookie(cookClient)) || !(Tools.ValidateCookie(sessionClient)) ) && Authentication == "1")
             Response.Redirect(pagLogin + "?pag=" + currentPage);
-        idClient = Tools.GetCookie(sessionClient).Value;
-        addrCliente = Tools.GetCookie(cookAddrClient).Value;
-
-        Session["urlOld"] = currentPage;
+        else {
+            idClient = Tools.GetCookie(sessionClient).Value;
+            addrCliente = Tools.GetCookie(cookAddrClient).Value;
+            state_Cliente = Tools.GetCookie(stateCliente).Value;
+            Session["urlOld"] = currentPage;
+            ValidateVisit(sessionClient); //Generate visit record of the day
+        }        
        
         try
         {
@@ -107,6 +112,26 @@ public partial class Website_Car : System.Web.UI.Page
     {
         Int32 _number = Convert.ToInt32(pNumber);
         return string.Format("{0:#,##0}", _number);
+    }
+
+    /// <summary>
+    /// Functoin that generate visit record of the day
+    /// </summary>
+    /// <param name=""></param>
+    private void ValidateVisit(String pSessionClient)
+    {
+        string _date = String.Format("{0}-{1}-{2}", DateTime.Now.Year, DateTime.Now.Month.ToString("00"), DateTime.Now.Day.ToString("00"));
+        UserBL _userBL;
+        Visit _visit;
+        if (!(Tools.ValidateCookie(cookClientVisit)))
+        {
+            Tools.CreateCookie(cookClientVisit, _date, _date);
+            _userBL = new UserBL();
+            _visit = new Visit();
+            _visit.IdVisit = 0;
+            _visit.IdUser = Convert.ToInt32(idClient);
+            _userBL.CRUDVisitBL(_visit, "INS", ref mError);
+        }
     }
 
     #region Paginate

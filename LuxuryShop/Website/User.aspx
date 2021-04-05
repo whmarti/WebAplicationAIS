@@ -102,6 +102,7 @@
                     </div>
        <asp:HiddenField id="typeUser" runat="server" />
        <asp:HiddenField id="IdUser" runat="server" />
+       <asp:HiddenField id="state" runat="server" />
             
         </section>
          <div class="MessagePanelDiv">

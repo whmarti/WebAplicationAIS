@@ -62,6 +62,17 @@ public partial class Admin_User : System.Web.UI.Page
         //user = new User();
         if (Session["typeUser"].ToString()=="Client")
             lblTitUser.Text = "New Customer";
+        FillStates();
+    }
+
+    /// <summary>
+    /// Function that fills the states to state control.
+    /// </summary>
+    protected void FillStates()
+    {
+        ddlState.Items.Add(new System.Web.UI.WebControls.ListItem("Pending", "Pending"));
+        ddlState.Items.Add(new System.Web.UI.WebControls.ListItem("Active", "Active"));
+        ddlState.Items.Add(new System.Web.UI.WebControls.ListItem("Inactive", "Inactive"));
     }
 
     /// <summary>
@@ -71,37 +82,40 @@ public partial class Admin_User : System.Web.UI.Page
     /// <param name="e"></param>
     protected void Update_Click(object sender, EventArgs e)
     {
-        try {           
-
-            String _msg = "<strong> User </strong> inserted <strong> successfully! </strong>";
-            user = new User();
-            user.name = name.Text.Trim();
-            user.type = Session["typeUser"].ToString();
-            user.lastName =lastName.Text.Trim();
-            user.email = email.Text.Trim();
-            user.phone = phone.Text.Trim();
-            user.pass = pass.Text.Trim();
-            user.address = address.Text.Trim();
-            userBL = new UserBL();
-            btnSave.Enabled = false;
-            userBL.CRUDUserBL(user, "INS",ref mError);
-            if (mError.code == "1")
+        try {
+            if (Page.IsValid)
             {
-                _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
-                ShowMessage(_msg, WarningType.Danger);
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                ShowMessage(_msg, WarningType.Success);
-                if (Session["typeUser"].ToString() == "Client")
-                    pgUsrBack = "Customers.aspx";
-                Response.AddHeader("REFRESH", "3;URL='" + pgUsrBack + "'");
-            }
-            if (mError.code != "1" && mError.code != "")
-            {
+                String _msg = "<strong> User </strong> inserted <strong> successfully! </strong>";
+                user = new User();
+                user.name = name.Text.Trim();
+                user.type = Session["typeUser"].ToString();
+                user.lastName = lastName.Text.Trim();
+                user.email = email.Text.Trim();
+                user.phone = phone.Text.Trim();
+                user.pass = pass.Text.Trim();
+                user.address = address.Text.Trim();
+                user.state = ddlState.SelectedValue;
+                userBL = new UserBL();
+                btnSave.Enabled = false;
+                userBL.CRUDUserBL(user, "INS", ref mError);
+                if (mError.code == "1")
+                {
+                    _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
+                    ShowMessage(_msg, WarningType.Danger);
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    ShowMessage(_msg, WarningType.Success);
+                    if (Session["typeUser"].ToString() == "Client")
+                        pgUsrBack = "Customers.aspx";
+                    Response.AddHeader("REFRESH", "3;URL='" + pgUsrBack + "'");
+                }
+                if (mError.code != "1" && mError.code != "")
+                {
                     Response.Write("Error DB: " + mError.mssg);
                     throw new Exception("Error DB: " + mError.mssg);
+                }
             }
         }
         catch (Exception ex)

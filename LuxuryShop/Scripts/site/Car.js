@@ -53,7 +53,12 @@ function updItem_final() {
 }
 
 
-function buy(pAddress) {
+function buy(pAddress, pState) {
+    if (pState!="Active") {
+        showMsg(false, "Your account is inactive. Please contact the Web administrator.");
+        return;
+    }
+
     if (!window.confirm("Do you really want to make the purchase and receive it at this address:\n" + pAddress + "?")) {
         return;
     }

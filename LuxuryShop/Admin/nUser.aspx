@@ -50,12 +50,20 @@
                         </div>
                     </div>
 
-             <div class="form-group">
+                    <div class="form-group">
                         <asp:Label runat="server"  AssociatedControlID="address" CssClass="col-md-4 control-label">Shipping address</asp:Label>                        
                         <div class="col-md-8">
                             <asp:TextBox runat="server"  ID="address" CssClass="form-control" style="max-width:480px !important; " MaxLength="15" />
                             <asp:RequiredFieldValidator runat="server" ControlToValidate="address"
                                 CssClass="text-danger" ErrorMessage="The Shipping address is required." />                     
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="ddlState" CssClass="col-md-4 control-label">State</asp:Label>
+                        <div class="col-md-8">
+                            <asp:DropDownList ID="ddlState" runat="server" CssClass="form-control" style="max-width:480px !important;" ></asp:DropDownList>                             
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlState" CssClass="text-danger" ErrorMessage="The State field is required." />
                         </div>
                     </div>
 
@@ -95,7 +103,8 @@
 
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <asp:Button runat="server"  Text="Insert" OnClientClick="if ( Page_ClientValidate() ) {hide();}"   OnClick="Update_Click" CssClass="btn btn-default" style="float: right" ID="btnSave"/>
+                            <asp:Button runat="server"  Text="|< Back" OnClientClick="history.go(-1); return false;"   CssClass="btn btn-warning"  ID="Back" />
+                            <asp:LinkButton runat="server"  Text="Insert" OnClientClick="if ( Page_ClientValidate() ) {hide();}"   OnClick="Update_Click" CssClass="btn btn-default" style="float: right" ID="btnSave"><i class='fa fa-save'></i> Insert</asp:LinkButton>
                         </div>
                     </div>
        <asp:HiddenField id="typeUser" runat="server" />

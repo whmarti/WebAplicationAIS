@@ -77,7 +77,7 @@ namespace Business
         /// <param name="pType"></param>
         /// <param name="pMError"></param>
         /// <returns></returns>
-        public List<User> getUserSearch_BL(String pType,String pSearch,  ref mError pMError)
+        public List<User> getUserSearch_BL(String pType, String pSearch, ref mError pMError)
         {
 
             UserDA dataAccess = new UserDA();
@@ -129,6 +129,17 @@ namespace Business
             return dataAccess.CRUDVisit(pVisit, pOper, ref pMError);
 
         }
-
+        /// <summary>
+        /// Function to change the password of the user
+        /// </summary>
+        /// <param name="pEmail"></param>
+        /// <param name="pPass"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public int UPD_Pass_UserBL(String pEmail, String pPass, ref mError pMError)
+        {
+            UserDA dataAccess = new UserDA();
+            return dataAccess.UPD_Pass_User(pEmail, pPass, ref pMError);
+        }
     }
 }

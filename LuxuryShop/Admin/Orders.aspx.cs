@@ -20,6 +20,7 @@ public partial class Admin_Orders : System.Web.UI.Page
     private readonly String pagLogin = ConfigurationManager.AppSettings["pagLoginM"];
     private readonly String pagErr = ConfigurationManager.AppSettings["pagError"];
     private readonly String cookUser = ConfigurationManager.AppSettings["cookUser"];
+    private readonly String usrAccountAuth = ConfigurationManager.AppSettings["usrAccountAuth"];
     private readonly String Authentication = ConfigurationManager.AppSettings["Authentication"];
     private const String currentPage = "Orders.aspx";
     private OrderBL orderBL;
@@ -31,7 +32,7 @@ public partial class Admin_Orders : System.Web.UI.Page
     {
         mError = new mError("", "");
         HideMessage();
-        if (!(Tools.ValidateCookie(cookUser)) && Authentication == "1")
+        if (!(Tools.ValidateCookie(usrAccountAuth)) && Authentication == "1")
             Response.Redirect(pagLogin + "?pag=" + currentPage);
 
         try

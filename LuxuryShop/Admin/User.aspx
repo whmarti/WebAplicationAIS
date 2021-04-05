@@ -61,6 +61,14 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="ddlState" CssClass="col-md-4 control-label">State</asp:Label>
+                        <div class="col-md-8">
+                            <asp:DropDownList ID="ddlState" runat="server" CssClass="form-control" style="max-width:480px !important;" ></asp:DropDownList>                             
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlState" CssClass="text-danger" ErrorMessage="The State field is required." />
+                        </div>
+                    </div>
+
                    <div class="form-group">
                         <asp:Label runat="server" AssociatedControlID="pass" CssClass="col-md-4 control-label">Password  &nbsp&nbsp&nbsp<span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>                       
                         <div class="col-md-8">
@@ -95,8 +103,9 @@
                    
 
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <asp:Button runat="server"  Text="Update" OnClientClick="if ( Page_ClientValidate() ) {hide();}"   OnClick="Update_Click" CssClass="btn btn-default" style="float: right" ID="btnSave" />
+                        <div class="col-md-offset-2 col-md-10">                           
+                           <asp:Button runat="server"  Text="|< Back" OnClientClick="history.go(-1); return false;"   CssClass="btn btn-warning"  ID="Back" />
+                            <asp:LinkButton runat="server"  Text="<i class='fa fa-save'></i> Update" OnClientClick="if ( Page_ClientValidate() ) {hide();}"   OnClick="Update_Click" CssClass="btn btn-default" style="float: right" ID="btnSave" > <i class='fa fa-save'></i> Update</asp:LinkButton>                                                   
                         </div>
                     </div>
        <asp:HiddenField id="typeUser" runat="server" />

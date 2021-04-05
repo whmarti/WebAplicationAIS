@@ -24,6 +24,7 @@ namespace Entity
         public String address { get; set; }
         public String pass { get; set; }
         public String date { get; set; }
+        public String state { get; set; }
 
         public void user()
         {

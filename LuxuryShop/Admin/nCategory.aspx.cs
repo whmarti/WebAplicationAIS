@@ -75,28 +75,30 @@ public partial class Admin_Category : System.Web.UI.Page
     protected void Update_Click(object sender, EventArgs e)
     {
         try {
-
-            String _msg = "<strong> Category </strong> inserted <strong> successfully! </strong>";
-            category = new Category();
-            category.name = name.Text.Trim();            
-            prodBL = new CategoryBL();
-            btnSave.Enabled = false;
-            prodBL.CRUDCategoryBL(category, "INS",ref mError);
-            if (mError.code == "1")
+            if (Page.IsValid)
             {
-                _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
-                ShowMessage(_msg, WarningType.Danger);
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                ShowMessage(_msg, WarningType.Success);
-                Response.AddHeader("REFRESH", "3;URL='Categories.aspx'");
-            }
-            if (mError.code != "1" && mError.code != "")
-            {
+                String _msg = "<strong> Category </strong> inserted <strong> successfully! </strong>";
+                category = new Category();
+                category.name = name.Text.Trim();
+                prodBL = new CategoryBL();
+                btnSave.Enabled = false;
+                prodBL.CRUDCategoryBL(category, "INS", ref mError);
+                if (mError.code == "1")
+                {
+                    _msg = "<strong> Error! </strong> " + mError.mssg.Trim();
+                    ShowMessage(_msg, WarningType.Danger);
+                    btnSave.Enabled = true;
+                }
+                else
+                {
+                    ShowMessage(_msg, WarningType.Success);
+                    Response.AddHeader("REFRESH", "3;URL='Categories.aspx'");
+                }
+                if (mError.code != "1" && mError.code != "")
+                {
                     Response.Write("Error DB: " + mError.mssg);
                     throw new Exception("Error DB: " + mError.mssg);
+                }
             }
         }
         catch (Exception ex)

@@ -29,9 +29,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <asp:Button runat="server"   Text="Login" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="Login_Click" CssClass="btn btn-default" style="float: right" ID="btnLogin" />
+                    <div class="form-group" style="padding-right:150px;">
+                        <div class="col-md-offset-2 col-md-10"> <a href="getPassword.aspx">Forgot the password?</a> | <a href="Register.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign Up</a>
+                            <asp:Button runat="server"   Text="Login" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="Login_Click" CssClass="btn btn-default" style="float: right;" ID="btnLogin" />
                         </div>
                     </div>
          </section>

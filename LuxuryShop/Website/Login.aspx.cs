@@ -21,6 +21,7 @@ public partial class Website_Login : System.Web.UI.Page
     private readonly String cookClient = ConfigurationManager.AppSettings["cookClient"];
     private readonly String cookAddrClient = ConfigurationManager.AppSettings["cookAddrClient"];
     private readonly String sessionClient = ConfigurationManager.AppSettings["sessionClient"];
+    private readonly String stateCliente = ConfigurationManager.AppSettings["stateCliente"];
     private static readonly String cookDateCreate = ConfigurationManager.AppSettings["cookDateCreate"];
     private string pagErr = "../" + ConfigurationManager.AppSettings["pagError"];
     private mError mError;
@@ -30,7 +31,7 @@ public partial class Website_Login : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         mError = new mError("", "");               
-        mpageRed = (Request.QueryString["s"] != "" && Request.QueryString["s"] != null) ? Request.QueryString["pag"]+"?s=" +Request.QueryString["s"] : Request.QueryString["pag"];
+        mpageRed = (Request.QueryString["s"] != "" && Request.QueryString["s"] != null) ? Request.QueryString["pag"]+"?s=" +Request.QueryString["s"] : (Request.QueryString["pag"]!=null) ?Request.QueryString["pag"] : pagDefault;
         if (!IsPostBack)
         {
 
@@ -73,16 +74,28 @@ public partial class Website_Login : System.Web.UI.Page
             }
             else
             {
-                Tools.CreateCookie(cookClient, user.name + " " + user.lastName);
-                Tools.CreateCookie(sessionClient, user.IdUser.ToString());
-                Tools.CreateCookie(cookAddrClient, user.address.ToString());
-                _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong> access successfully! ";
-                ShowMessage(_msg, WarningType.Success);
-                //Response.AddHeader("REFRESH", "3;URL='" + mpageRed + "'");
+                if (user.state == "Inactive")
+                {
+                    mError.mssg = "Your account is inactive. Please contact the Web administrator."; 
 
-                string _script = "$('#cover-spin').hide();";
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
-                Response.Redirect(mpageRed, false);
+                    btnLogin.Enabled = true;
+                    _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong>. " + mError.mssg;
+                    ShowMessage(_msg, WarningType.Warning);
+                    string _script = "$('#cover-spin').hide();";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
+                }
+                else
+                {
+                    Tools.CreateCookie(cookClient, user.name + " " + user.lastName);
+                    Tools.CreateCookie(sessionClient, user.IdUser.ToString());
+                    Tools.CreateCookie(cookAddrClient, user.address.ToString());
+                    Tools.CreateCookie(stateCliente, user.state.ToString());
+                    _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong> access successfully! ";
+                    ShowMessage(_msg, WarningType.Success);
+                    string _script = "$('#cover-spin').hide();";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
+                    Response.Redirect(mpageRed, false);
+                }
             }
             if (mError.code != "1" && mError.code != "")
             {
