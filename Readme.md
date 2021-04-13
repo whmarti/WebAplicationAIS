@@ -8,6 +8,7 @@ It is an online store of luxury clothing accessories, made by renowned designers
 * [Delivery format](#delivery-format)
 * [Configuration notes](#Configuration-notes)
 * [Demo site](#demo-site)
+* [Scope of development](#scope-of-development)
 * [License](#licence)
 
 ## General info
@@ -44,6 +45,24 @@ Source code in .Net Framework 4.6.1
 ## Demo site
 
 [![Luxury Accesories](https://luxuryshop.somee.com/assets/Demo.jpg "The most fashionable accessories.")](https://luxuryshop.somee.com/index.aspx)
+
+## Scope of development
+><h3>Client web site:</h3> 
+>*Home<br/>
+>*Product search and selection <br/>
+>*Shopping cart management<br/>
+>*Orders management and Invoice<br/>
+>*Security module: Login, Register, Reset Password<br/>
+>*About info
+>*Contact info
+##
+><h3>Manager module:</h3> 
+>*Home<br/>
+>*User and customer management<br/>
+>*Category management<br/>
+>*Product management<br/>
+>*Orders management and Invoice<br/>
+>*Security module: Login, Register, Reset Password<br/>
 
 ## License
 [Private use](https://choosealicense.com/appendix/#private-use)
