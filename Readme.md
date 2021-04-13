@@ -45,5 +45,6 @@ Source code in .Net Framework 4.6.1
 ## Demo site
 
 [![Luxury Accesories](/assets/Demo.jpg "The most fashionable accessories.")](https://luxuryshop.somee.com/index.aspx)
+
 ## License
 [Private use](https://choosealicense.com/appendix/#private-use)
