@@ -389,6 +389,32 @@
         margin-top: 18px;
     }
 }
-@media screen and (max-width: 549px) {
-    
-}
+@media screen and (max-width: 540px) {
+    /*Bag.aspx Car.aspx*/
+    .card {
+        width: 330px;
+        height: 180px;
+    }
+
+    .container {
+        width: 358px !important;
+    }
+
+    /*Orders*/
+    .table {
+        width: 358px !important;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+
+    /*Registers pages*/
+    .imgRegister {
+        height: auto;
+    }
+    .Divframe {
+        height:270px !important;
+    }
+    /*About page*/    
+    .DivAboutframe {
+        height: 270px !important;
+    }}

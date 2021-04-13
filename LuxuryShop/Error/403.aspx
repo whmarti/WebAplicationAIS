@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="Client.master" AutoEventWireup="true" CodeFile="403.aspx.cs" Inherits="Oops" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Client.master" AutoEventWireup="true" CodeFile="403.aspx.cs" Inherits="Error_403" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" Runat="Server" style="height:100%">
     <div class="container" style="margin-top:100px;text-align: center;" >

@@ -125,7 +125,7 @@
               <div class="foot">
                 <div class="cover " >
                   <div class="col-4 child" style="padding-left:8px;">
-                      <i class="fas fa-map-marker-alt  teal-color"></i> Fitzherbert, Palmerston North 4410 - NZ<br />
+                      <a href="ContactUs.aspx" title="View details & map."><i class="fas fa-map-marker-alt  teal-color"></i> Fitzherbert, Palmerston North 4410 - NZ</a><br />
                       <i class="fas fa-phone fa-rotate-90 text-primary"></i> +64 201 2347698<br />
                   </div>
                   <div class="col-4  center" style="padding-right:20px;">

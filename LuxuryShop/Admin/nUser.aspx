@@ -71,7 +71,7 @@
                         <asp:Label runat="server" AssociatedControlID="pass" CssClass="col-md-4 control-label">Password  &nbsp&nbsp&nbsp<span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>                       
                         <div class="col-md-8">
                               
-                            <asp:TextBox runat="server" ID="pass" TextMode="Password" CssClass="form-control" style="max-width:480px !important; " MaxLength="12" />
+                            <asp:TextBox runat="server" ID="pass"  onClick="showDesc();" TextMode="Password" CssClass="form-control" style="max-width:480px !important; " MaxLength="12" />
                              <span id="passDesc" class="iconDesc">Password criteria:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="#" onClick="hideDesc();" class="linkPass"><i class='fa fa-check'></i></a><br />
                                 7  Min. Characters length<br />
                                 2  Letters in Upper Case<br />

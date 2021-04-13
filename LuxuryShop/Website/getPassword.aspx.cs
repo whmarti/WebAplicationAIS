@@ -25,27 +25,39 @@ public partial class Website_Login : System.Web.UI.Page
     private static readonly String cookDateCreate = ConfigurationManager.AppSettings["cookDateCreate"];
     private string pagErr = "../" + ConfigurationManager.AppSettings["pagError"];
     private mError mError;
-    private String mpageRed, option;
+    private String mpageRed, uId;
     private UserBL userBl;
     private User user;   
     protected void Page_Load(object sender, EventArgs e)
     {
         mError = new mError("", "");               
-        mpageRed = (Request.QueryString["s"] != "" && Request.QueryString["s"] != null) ? Request.QueryString["pag"]+"?s=" +Request.QueryString["s"] : (Request.QueryString["pag"]!=null) ?Request.QueryString["pag"] : pagDefault;
+        mpageRed = pagDefault;
         if (!IsPostBack)
         {
 
-            if (Request.QueryString["opt"] != null)
+            try
             {
-                option = Request.QueryString["opt"];
-                //if (option == "logOut")
-                //{
-                //    Tools.DeleteCookie(cookClient);
-                //    Tools.DeleteCookie(sessionClient);
-                //    Response.Redirect(pagDefault);
-                //}
-            }
+                if (Request.QueryString["uId"] != null)
+                {
+                    uId = Request.QueryString["uId"];
+                    userBl = new UserBL();
+                    if (userBl.validateUserIdChgPassBL(uId, ref mError))
+                    {
+                        email.Text = mError.mssg;
+                        hidValidIdReq.Value = "true";
+                    }
+                    else
+                    {
+                        hidValidIdReq.Value = "false";
+                    }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Session["error"] = ex.Message;
+                ShowMessage("Error DB: " + mError.mssg, WarningType.Warning);
+            }
         }
 
     }
@@ -64,15 +76,29 @@ public partial class Website_Login : System.Web.UI.Page
 
             String _msg = "";
             userBl = new UserBL();
-            userBl.UPD_Pass_UserBL(email.Text.Trim(), password.Text.Trim(), ref mError);
-            //btnLogin.Enabled = false; 
-            user = userBl.getUserLoginBL(email.Text.Trim(), password.Text.Trim(),"Client", ref mError);
-           
+            btnLogin.Visible = false;
+            if (hidValidIdReq.Value == "false")
+            {
+                _msg = "<strong> Request expired or not exists. </strong> Ask for a new password change request! ";
+                ShowMessage(_msg, WarningType.Danger);
+                string _script = "$('#cover-spin').hide();";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
+                Response.AddHeader("REFRESH", "4;URL='assignNewpss.aspx'");
+
+            }
+
+            else
+            {
+                userBl.UPD_Pass_UserBL(email.Text.Trim(), password.Text.Trim(), ref mError);
+
+                user = userBl.getUserLoginBL(email.Text.Trim(), password.Text.Trim(), "Client", ref mError);
+
                 if (user.state == "Inactive")
                 {
-                    mError.mssg = "Your account is inactive. Please contact the Web administrator."; 
+                    mError.mssg = "Your account is inactive. Please contact the Web administrator.";
 
                     //btnLogin.Enabled = true;
+                    btnLogin.Visible = true;
                     _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong>. " + mError.mssg;
                     ShowMessage(_msg, WarningType.Warning);
                     string _script = "$('#cover-spin').hide();";
@@ -90,11 +116,12 @@ public partial class Website_Login : System.Web.UI.Page
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
                     Response.Redirect(mpageRed, false);
                 }
-           
+            }
             if (mError.code != "1" && mError.code != "")
             {
                 Response.Write("Error DB: " + mError.mssg);
                 ShowMessage("Error DB: " + mError.mssg, WarningType.Warning);
+                btnLogin.Visible = true;
                 //throw new Exception("Error DB: " + mError.mssg);
             }
 

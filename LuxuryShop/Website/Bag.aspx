@@ -10,7 +10,10 @@
        <div class="bannerClient"> 
             <table style="width: 100%;text-align:center;">
 		       <tr>
-                  <td  style="text-align: right;width:30%;">Offers: <span style="padding-top:4px;"><asp:CheckBox ID="chkOffer" runat="server"  /></span></td>
+                  <td  style="text-align: right;width:30%;">Offers: <span style="padding-top:4px;"><asp:CheckBox ID="chkOffer" runat="server"  /></span><br />
+                   <%if (orderbyT != "")
+                       {%>   <i class='fa fa-arrow-circle-<%= orderbyT == "asc"? "up" : "down" %>'></i><%}%>&nbsp<asp:DropDownList ID="ddlOrder" runat="server" style="" ></asp:DropDownList> 
+                  </td>
 			      <td style="text-align: center;width:30%;"><h2><asp:Label runat="server" ID="lblTitle">hi</asp:Label></h2></td>  
                   <td style="text-align: left;width:35%;">&nbsp&nbsp<asp:TextBox runat="server"  id="txtSearch"/>&nbsp 
                   <asp:LinkButton runat="server" ID="btnRun"  OnClientClick="if ( Page_ClientValidate() ) {hide();}"  OnClick="Search_Click" CssClass="greenButton"><i id="lens" class="fa fa-search"></i> Search</asp:LinkButton></td>	               
@@ -40,8 +43,7 @@
                       <hr />
                       <span class='text-info mr-1 <%#Convert.ToString(Eval("discount"))=="0"? "priceSDcto" : "priceDcto"%>' ><%# (Convert.ToString(Eval("discount"))!="0" && Convert.ToInt32(Eval("monthDcto")) == (DateTime.Now.Month)  )? "€"+Eval("discount") :""%></span>
 
-                      <span class="price mx-3 <%#(Convert.ToString(Eval("discount"))=="0" || Convert.ToInt32(Eval("monthDcto")) != (DateTime.Now.Month))? "" : "priceCDcto"%>">€<%#numberFormat(Eval("price"))%></span>
-                      <span style="float:right; padding-right:4px;padding-bottom:3px;">                       
+                      <span class="price mx-3 <%#(Convert.ToString(Eval("discount"))=="0" || Convert.ToInt32(Eval("monthDcto")) != (DateTime.Now.Month))? "" : "priceCDcto"%>">€<%#numberFormat(Eval("price"))%></span><span style="float:right; padding-right:4px;padding-bottom:3px;">                       
                           <button type="button" class="btn btn-light btn-sm mr-1 my-1" data-name='<%#Eval("name")%>' data-color='<%#Eval("color")%>' data-brand='<%#Eval("brand")%>' data-size='<%#Eval("size")%>' data-photo='<%= dirPhoto.ToString()%>/<%#Eval("photoD")%>' data-price='<%#Eval("price")%>' data-discount='<%#Eval("discount")%>' data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-info-circle pr-2"></i>Details</button>
                        <button type="button" class="btn btn-info btn-sm mr-1 my-1 producto" data-idp='<%#Eval("IdProduct")%>' ><i class="fas fa-shopping-cart pr-2"></i>Add to cart</button>
                        </span>

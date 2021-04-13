@@ -191,11 +191,14 @@ namespace DataAccess
         /// <param name="pType"></param>
         /// <param name="pMError"></param>
         /// <returns></returns>
-        public List<Product> getProductClientSearch(String pSearch, String pType, int pOffer, ref mError pMError)
+        public List<Product> getProductClientSearch(String pSearch, String pType, int pOffer, String pOrderBy, String pTypeOrderBy, ref mError pMError)
         {
             List<Product> _products = new List<Product>();
             String _offer = pOffer > 0? " and monthDcto=" + pOffer : "";
-            String _sql = "Select p.*,c.name as category from product p inner join Category c on p.IdCategory=C.IdCategory where (p.name like @pSearch OR p.brand like @pSearch or p.size like @pSearch) AND c.name = @pType" + _offer;
+            String _orderBy = pOrderBy==""? "" : pOrderBy=="price"? " order by price" : " order by "+ pOrderBy;
+            _orderBy = pOrderBy != "" ? _orderBy + " " + pTypeOrderBy : _orderBy;
+
+            String _sql = "Select p.*,c.name as category from product p inner join Category c on p.IdCategory=C.IdCategory where (p.name like @pSearch OR p.brand like @pSearch or p.size like @pSearch) AND c.name = @pType" + _offer+ _orderBy;
             try
             {
                 using (SqlConnection _conn = new SqlConnection(strConn))

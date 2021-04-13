@@ -69,7 +69,7 @@
              <asp:Button ID="Button3" runat="server" Font-Bold="true" Text="Next" onclick="Button3_Click"  />&nbsp 
        
              <asp:Button ID="Button4" runat="server" Font-Bold="true" Text="Last" onclick="Button4_Click"    />&nbsp <%  }  %> 
-             <%if (nCarItems > 0) { %> <span style="float:right;">  <button type="button" onclick="buy('<%=addrCliente %>','<%=state_Cliente%>')" class="btn btn-warning btn-sm mr-1 my-1 " data-idp='<%#Eval("IdProduct")%>'><i class="fa fa-credit-card"></i> Buy</button></span> <%  } else{ %> You don't have items in the car at the moment.<%  } %> 
+             <%if (nCarItems > 0) { %> <span style="float:right;">  <button type="button" onclick="buy('<%=addrCliente %>','<%=state_Client%>')" class="btn btn-warning btn-sm mr-1 my-1 " data-idp='<%#Eval("IdProduct")%>'><i class="fa fa-credit-card"></i> Buy</button></span> <%  } else{ %> You don't have items in the car at the moment.<%  } %> 
                 <input type="hidden" id="nCarItems" value="<%=nCarItems%>" />
             </div>
         </td>  

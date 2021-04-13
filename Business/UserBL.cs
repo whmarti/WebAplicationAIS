@@ -141,5 +141,53 @@ namespace Business
             UserDA dataAccess = new UserDA();
             return dataAccess.UPD_Pass_User(pEmail, pPass, ref pMError);
         }
+
+        /// <summary>
+        /// Get the user Id encrypted to request change of password.
+        /// </summary>
+        /// <param name="pEmailUser"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        //public byte[] getUserIdChgPassBL(String pEmailUser, ref mError pMError)
+        //{
+        //    UserDA dataAccess = new UserDA();
+        //    return dataAccess.getUserIdChgPass(pEmailUser, ref pMError);
+        //}
+
+        /// <summary>
+        /// Confirms the validity of the  user.
+        /// </summary>
+        /// <param name="pIdUser"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public Boolean validateUserIdChgPassBL(String pIdUser, ref mError pMError)
+        {
+            UserDA dataAccess = new UserDA();
+            return dataAccess.validateUserIdChgPass(pIdUser, ref pMError);
+        }
+
+        /// <summary>
+        /// Get the user email to allow change of password.
+        /// </summary>
+        /// <param name="pIdUser"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public String getUserEmailBl(String pIdUser, ref mError pMError)
+        {
+            UserDA dataAccess = new UserDA();
+            return dataAccess.getUserEmail(pIdUser, ref pMError);
+        }
+
+        /// <summary>
+        /// Function to register a password change request.
+        /// </summary>
+        /// <param name="pEmail"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public String ResetPasswordRequestsBl(String pEmail, String pType,  ref mError pMError)
+        {
+            UserDA dataAccess = new UserDA();
+            return dataAccess.ResetPasswordRequests(pEmail, pType, ref pMError);
+        }
     }
 }

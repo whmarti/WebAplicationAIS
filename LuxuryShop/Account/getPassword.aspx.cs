@@ -22,25 +22,42 @@ public partial class Website_Login : System.Web.UI.Page
     private readonly String pagLogin = ConfigurationManager.AppSettings["pagLogin"];
     private readonly String cookUser = ConfigurationManager.AppSettings["cookUser"];
     private readonly String sessionUser = ConfigurationManager.AppSettings["sessionUser"];
-    private readonly String stateUser = ConfigurationManager.AppSettings["stateCliente"];
+    private readonly String stateUser = ConfigurationManager.AppSettings["stateUser"];
     private static readonly String cookDateCreate = ConfigurationManager.AppSettings["cookDateCreate"];
     private string pagErr = ConfigurationManager.AppSettings["pagError"];
     private mError mError;
-    private String mpageRed, option;
+    private String mpageRed, uId;
     private UserBL userBl;
     private User user;   
     protected void Page_Load(object sender, EventArgs e)
     {
+        String _msg = "";
         mError = new mError("", "");
-        mpageRed = Request.QueryString["pag"] != null ? Request.QueryString["pag"].ToString() : pagDefaultM;
+        mpageRed = pagDefaultM;
         if (!IsPostBack)
         {
-
-            if (Request.QueryString["opt"] != null)
-            {
-                option = Request.QueryString["opt"];               
+            try { 
+                if (Request.QueryString["uId"] != null)
+                {
+                    uId = Request.QueryString["uId"];
+                    userBl = new UserBL();
+                    if(userBl.validateUserIdChgPassBL(uId, ref mError))
+                    {
+                        email.Text = mError.mssg;
+                        hidValidIdReq.Value = "true";
+                    }
+                    else
+                    {
+                        hidValidIdReq.Value = "false";
+                    }
+                    
+                }
             }
-
+            catch (Exception ex)
+            {               
+                Session["error"] = ex.Message;
+                ShowMessage("Error DB: " + mError.mssg, WarningType.Warning);
+            }
         }
 
     }
@@ -58,37 +75,52 @@ public partial class Website_Login : System.Web.UI.Page
         {
 
             String _msg = "";
-            userBl = new UserBL();
-            userBl.UPD_Pass_UserBL(email.Text.Trim(), password.Text.Trim(), ref mError);
-            //btnLogin.Enabled = false; 
-            user = userBl.getUserLoginBL(email.Text.Trim(), password.Text.Trim(),"Admin", ref mError);
+            btnLogin.Visible = false;
+            if (hidValidIdReq.Value == "false")
+            {
+                _msg = "<strong> Request expired or not exists. </strong> Ask for a new password change request! ";
+                ShowMessage(_msg, WarningType.Danger);
+                string _script = "$('#cover-spin').hide();";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
+                Response.AddHeader("REFRESH", "4;URL='assignNewpss.aspx'");
+
+            }
+
+            else { 
+                userBl = new UserBL();
+                userBl.UPD_Pass_UserBL(email.Text.Trim(), password.Text.Trim(), ref mError);
+                btnLogin.Enabled = false; 
+                user = userBl.getUserLoginBL(email.Text.Trim(), password.Text.Trim(),"Admin", ref mError);
            
                 if (user.state == "Active")
                 {
-                    Tools.CreateCookie(cookUser, user.name + " " + user.lastName);
-                    Tools.CreateCookie(sessionUser, user.IdUser.ToString());
-                    Tools.CreateCookie(stateUser, user.state.ToString());
-                    _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong> access successfully! ";
+                    //Tools.CreateCookie(cookUser, user.name + " " + user.lastName);
+                    //Tools.CreateCookie(sessionUser, user.IdUser.ToString());
+                    //Tools.CreateCookie(stateUser, user.state.ToString());
+                    _msg = "<strong> Mr(s). " + user.name + " " + user.lastName + " </strong> your password was changed successfully! ";
                     ShowMessage(_msg, WarningType.Success);
                     string _script = "$('#cover-spin').hide();";
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
-                    Response.Redirect(mpageRed, false);
-            }
+                    Response.AddHeader("REFRESH", "4;URL='" + pagLogin + "'");
+                }
                 else
                 {
                      mError.mssg = "Your account is "+ user.state + ". Please contact the Web administrator."; 
 
-                    //btnLogin.Enabled = true;
+                    btnLogin.Visible = true;
                     _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong>. " + mError.mssg;
                     ShowMessage(_msg, WarningType.Warning);
                     string _script = "$('#cover-spin').hide();";
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
                 }
-           
+            }
+
+
             if (mError.code != "1" && mError.code != "")
             {
                 Response.Write("Error DB: " + mError.mssg);
                 ShowMessage("Error DB: " + mError.mssg, WarningType.Warning);
+                btnLogin.Visible = true;
                 //throw new Exception("Error DB: " + mError.mssg);
             }
 
@@ -108,53 +140,7 @@ public partial class Website_Login : System.Web.UI.Page
 
 
     
-    protected void Email_Click(object sender, EventArgs e)
-    {
-        //userBl = new UserBL();
-        //userBl.UPD_Pass_UserBL(email.Text.Trim(), password.Text.Trim(), ref mError);
-        SendPasswordResetEmail(email.Text.Trim(), "Will", "123456");
-        lblMessage.Text = "An email with instructions to reset your password is sent to your registered email";
-    }
-
-    private void SendPasswordResetEmail(string pToEmail, string pUserName, string pUniqueId)
-    {
-        String _msg = "Email sent successfully.";
-        try
-        {
-        
-            // MailMessage class is present is System.Net.Mail namespace
-            MailMessage mailMessage = new MailMessage("guille22w@gmail.com", pToEmail);
-        // StringBuilder class is present in System.Text namespace
-        StringBuilder sbEmailBody = new StringBuilder();
-        sbEmailBody.Append("Dear " + pUserName + ",<br/><br/>");
-        sbEmailBody.Append("Please click on the following link to reset your password");
-        sbEmailBody.Append("<br/>"); sbEmailBody.Append("http://localhost/Luxury/Account/getPassword.aspx?uId=" + pUniqueId);
-        sbEmailBody.Append("<br/><br/>");
-        sbEmailBody.Append("<b>Luxury Accessories</b>");
-
-        mailMessage.IsBodyHtml = true;
-
-        mailMessage.Body = sbEmailBody.ToString();
-        mailMessage.Subject = "Reset Your Password";
-        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-
-        smtpClient.Credentials = new System.Net.NetworkCredential()
-        {
-            UserName = "guille22w@gmail.com",
-            Password = "camushaka*33*G"
-        };
-
-        smtpClient.EnableSsl = true;
-        smtpClient.Send(mailMessage);
-        }
-        catch (Exception ex)
-        {           
-            Session["error"] = ex.Message;
-            _msg= ex.Message;
-        }
-        lblMessage.Text = _msg;
-    }
-
+   
 
     /// <summary>
     /// Function that informs in a square the results of the transactionts via user interface.

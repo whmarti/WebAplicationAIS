@@ -18,7 +18,7 @@
 
 
 
-    <div >
+    <div class="table">
       <asp:GridView ID="gvOrders" runat="server" AutoGenerateColumns="false" AllowPaging="True" CssClass="table table-striped "  PageSize="10" 
         OnPageIndexChanging="gv_OnPageIndexChanging"  >
         <PagerSettings Mode="NumericFirstLast" PageButtonCount="4" FirstPageText="First" LastPageText="Last" />

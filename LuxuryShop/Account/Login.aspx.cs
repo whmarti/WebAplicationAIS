@@ -34,7 +34,7 @@ public partial class Admin_Login : System.Web.UI.Page
         mError = new mError("","");
         
         mpageRed = Request.QueryString["pag"] != null ? Request.QueryString["pag"].ToString() : pagDefaultM;
-        lkForgot.NavigateUrl = Request.QueryString["pag"] != null ? "getPassword.aspx?pag="+ mpageRed : "getPassword.aspx";
+        lkForgot.NavigateUrl = Request.QueryString["pag"] != null ? "assignNewpss.aspx?pag="+ mpageRed : "assignNewpss.aspx";
         if (!IsPostBack)
         {
 
@@ -46,7 +46,7 @@ public partial class Admin_Login : System.Web.UI.Page
                     Tools.DeleteCookie(cookUser);
                     Tools.DeleteCookie(usrAccountAuth);
 
-                    Response.Redirect(pagDefaultM);
+                    Response.Redirect(pagLogin);
                 }
             }
 
@@ -118,7 +118,7 @@ public partial class Admin_Login : System.Web.UI.Page
 
 
 
-                        Response.Redirect("~/Admin/" + mpageRed, false);
+                        Response.Redirect( mpageRed, false);
                     }
                 }
                 if (mError.code != "1" && mError.code != "")

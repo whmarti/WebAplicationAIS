@@ -23,8 +23,8 @@
                     </div>                  
                     <div class="form-group" style="padding-right:150px;">
                         <div class="col-md-offset-2 col-md-10">                            
-                            <asp:Label ID="lblMessage" runat="server" Text="Label"></asp:Label>
-                            <asp:LinkButton runat="server" ID="lkb_Email" Text="<i class='fa fa-usb'></i> Send-Email" OnClick="Email_Click" CssClass="btn btn-default" style="float: right;"  />
+                            <asp:Label ID="lblMessage" runat="server" Text="" CssClass="text-danger"></asp:Label>
+                            <asp:LinkButton runat="server" ID="lkb_Email" Text="<i class='fa fa-address-card-o'></i> Request" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="Email_Click" CssClass="btn btn-default" style="float: right;"  />
                            
                         </div>
                     </div>

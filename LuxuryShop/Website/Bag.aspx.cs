@@ -17,7 +17,7 @@ using System.Web.UI.WebControls;
 public partial class Website_Bag : System.Web.UI.Page
 {
     private readonly int showErr = Convert.ToInt32(ConfigurationManager.AppSettings["DataBaseErr"]);
-    private readonly String pagLogin = ConfigurationManager.AppSettings["pagLoginM"];
+    private readonly String pagLogin = ConfigurationManager.AppSettings["pagLogin"];
     private readonly String pagErr = "../" + ConfigurationManager.AppSettings["pagError"];
     private readonly String cookClient = ConfigurationManager.AppSettings["cookClient"];
     private readonly String cookClientVisit = ConfigurationManager.AppSettings["cookClientVisit"];
@@ -30,6 +30,7 @@ public partial class Website_Bag : System.Web.UI.Page
     private CarItemBL carItemBL;
     private int CurrentPage;
     public int numRows = 0;
+    public String orderbyT = "";
     String prod="b",search="", directory, current_Page="Bag.aspx", legendSearch = "Name, Brand...";
     private mError mError;   
     public int nCarItems = 0, userId;
@@ -93,7 +94,7 @@ public partial class Website_Bag : System.Web.UI.Page
     /// </summary>
     protected void FillData(String prod)
     {
-        String _cat = prod == null ? "" : prod.Trim();
+        String _cat = prod == null ? "" : prod.Trim(), _order;
         int _offer = 0;
         if (search == "" && txtSearch.Text.ToString() != "")
             search = txtSearch.Text.ToString();
@@ -116,8 +117,12 @@ public partial class Website_Bag : System.Web.UI.Page
                
         }
         this.Image2.ImageUrl = "../Images/" + _cat + ".jpg";
+        bind_order_ddl();
+        ViewState["Orderby"] = ddlOrder.SelectedValue;
+        ViewState["OrderbyT"] = "asc";
+        _order = ddlOrder.SelectedValue;
         prodBL = new ProductBL();
-        System.Collections.Generic.List<Entity.Product> _lstDt = _cat==""? prodBL.getProductsBL(ref mError) : prodBL.getProductSearchCliente_BL(search, _cat, _offer,  ref mError); 
+        System.Collections.Generic.List<Entity.Product> _lstDt = _cat==""? prodBL.getProductsBL(ref mError) : prodBL.getProductSearchCliente_BL(search, _cat, _offer, _order, ViewState["OrderbyT"].ToString(), ref mError); 
         if (_lstDt != null)
         {
             if (_lstDt.Count > 0)
@@ -155,6 +160,26 @@ public partial class Website_Bag : System.Web.UI.Page
                 txtSearch.Text = "";
             Session["searchProd"] = txtSearch.Text;
             search = txtSearch.Text;
+
+            if (ddlOrder.SelectedValue == "")
+            {
+                ViewState["Orderby"] = "";
+                ViewState["OrderbyT"] = "";
+            }
+            else if (ViewState["Orderby"].ToString() == ddlOrder.SelectedValue)
+            {
+                ViewState["Orderby"] = ddlOrder.SelectedValue;
+                if (ViewState["OrderbyT"].ToString() == "asc")
+                    ViewState["OrderbyT"] = "desc";
+                else
+                    ViewState["OrderbyT"] = "asc";
+            }
+            else
+            {
+                ViewState["Orderby"] = ddlOrder.SelectedValue;
+                ViewState["Orderby"] = ddlOrder.SelectedValue;
+            }
+            orderbyT = ViewState["OrderbyT"].ToString();
             prodBL = new ProductBL();
             switch (_cat)
             {
@@ -177,7 +202,7 @@ public partial class Website_Bag : System.Web.UI.Page
             }
             this.Image2.ImageUrl = "../Images/" + _cat + ".jpg";
 
-            System.Collections.Generic.List<Entity.Product> _lstDt = _cat == "" ? prodBL.getProductsBL(ref mError) : prodBL.getProductSearchCliente_BL(search, _cat, _offer, ref mError); //
+            System.Collections.Generic.List<Entity.Product> _lstDt = _cat == "" ? prodBL.getProductsBL(ref mError) : prodBL.getProductSearchCliente_BL(search, _cat, _offer, ViewState["Orderby"].ToString(), ViewState["OrderbyT"].ToString(),ref mError); //
             if (_lstDt != null)
             {
                 if (_lstDt.Count > 0)
@@ -220,6 +245,18 @@ public partial class Website_Bag : System.Web.UI.Page
         Page.ClientScript.RegisterStartupScript(this.GetType(), "load", _script, true);
     }
 
+    /// <summary>
+    /// Function that populate the Orderby listbox
+    /// </summary>
+    protected void bind_order_ddl()
+    {
+
+        ddlOrder.Items.Add(new System.Web.UI.WebControls.ListItem("Order by..", ""));
+        ddlOrder.Items.Add(new System.Web.UI.WebControls.ListItem("Brand", "brand"));        
+        ddlOrder.Items.Add(new System.Web.UI.WebControls.ListItem("Price", "price"));
+        ddlOrder.Items.Add(new System.Web.UI.WebControls.ListItem("Product", "name"));        
+
+    }
     /// <summary>
     /// Function that obtains the information of articles that the client has in the shopping cart if he 
     /// is logged in.

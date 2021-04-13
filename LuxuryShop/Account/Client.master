@@ -71,6 +71,7 @@
                               <span class="caret"></span></a>
                           <ul class="dropdown-menu">                              
                              <li><a href="Login.aspx"><i class='fa fa-user-circle'></i>&nbsp;Sign In</a></li> 
+                             <li><a href="Register.aspx"><i class='fa fa-id-card'></i>&nbsp;Register</a></li>
                           </ul>
                         </li>
                         

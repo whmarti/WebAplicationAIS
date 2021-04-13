@@ -17,14 +17,14 @@ using System.Web.UI.WebControls;
 public partial class Website_Car : System.Web.UI.Page
 {
     private readonly int showErr = Convert.ToInt32(ConfigurationManager.AppSettings["DataBaseErr"]);
-    private readonly String pagLogin = ConfigurationManager.AppSettings["pagLoginM"];
+    private readonly String pagLogin = ConfigurationManager.AppSettings["pagLogin"];
     private readonly String pagErr = "../" + ConfigurationManager.AppSettings["pagError"];
     private readonly String cookClient = ConfigurationManager.AppSettings["cookClient"];
     private readonly String cookAddrClient = ConfigurationManager.AppSettings["cookAddrClient"];
     private readonly String cookClientVisit = ConfigurationManager.AppSettings["cookClientVisit"];
-    private readonly String stateCliente = ConfigurationManager.AppSettings["stateCliente"];
+    private readonly String stateClient = ConfigurationManager.AppSettings["stateClient"];
     private readonly String Authentication = ConfigurationManager.AppSettings["Authentication"]; 
-    public String dirPhoto = ConfigurationManager.AppSettings["dirPhoto"], addrCliente = "", state_Cliente="";
+    public String dirPhoto = ConfigurationManager.AppSettings["dirPhoto"], addrCliente = "", state_Client="";
     private readonly String sessionClient = ConfigurationManager.AppSettings["sessionClient"];
     private readonly String pagSizeCli = ConfigurationManager.AppSettings["pagSizeCli"];
     private const String currentPage = "Car.aspx";
@@ -44,7 +44,7 @@ public partial class Website_Car : System.Web.UI.Page
         else {
             idClient = Tools.GetCookie(sessionClient).Value;
             addrCliente = Tools.GetCookie(cookAddrClient).Value;
-            state_Cliente = Tools.GetCookie(stateCliente).Value;
+            state_Client = Tools.GetCookie(stateClient).Value;
             Session["urlOld"] = currentPage;
             ValidateVisit(sessionClient); //Generate visit record of the day
         }        
@@ -250,12 +250,12 @@ public partial class Website_Car : System.Web.UI.Page
     /// <param name="pIdProd"></param>
     /// <returns></returns>
     [WebMethod(EnableSession = true)]
-    public static object WebM_UpdCarItem(String pIdCarItem, int pQty, String pOper)
+    public static object WebM_UpdCarItem(String pIdCarItem, int pQty, String pOper)  
     {
         int _showErr = Convert.ToInt32(ConfigurationManager.AppSettings["DataBaseErr"]);
         String _sessionClient = ConfigurationManager.AppSettings["sessionClient"];
         mError _mError = new mError("", "");
-        String _msg = "Product updated to the car...";
+        String _msg = pOper == "DEL" ? "Product removed from shopping car...!" : "Product updated in the shopping car...!";
         Boolean _success = false;
         //HttpContext context = HttpContext.Current;
         try
@@ -278,12 +278,12 @@ public partial class Website_Car : System.Web.UI.Page
                 _success = true;
                 if (_mError.code != "0" && _mError.code != "")
                 {
-                    _msg = _showErr == 1 ? "Error DB: " + _mError.mssg : "There was a failure, operation canceled";
+                    _msg = _showErr == 1 ? "Error DB: " + _mError.mssg : "There was a failure, operation canceled.";
                     _success = false;
                 }
 
             }
-            else { _msg = "Operation cancelled"; }
+            else { _msg = "Operation cancelled."; }
 
 
         }

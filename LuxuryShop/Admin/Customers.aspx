@@ -5,7 +5,7 @@
        <div class="row container  " style="align-items: center;display: flex;">
               <div class="col-3 pt-1 " style="flex:2 1 auto; ">
                 <a class="navbar-brand" href="nUser.aspx" style="float: left;margin-top:10px;"><i class='fa fa-download'></i>&nbsp;New Customer</a><br />
-                <a class="navbar-brand" href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter"><i class='fa fa-random'></i>&nbsp;Top <%=topVisitors%> more visitants</a>
+                <a class="navbar-brand" href="#exampleModalCenter" data-toggle="modal" data-target="#exampleModalCenter"><i class='fa fa-random'></i>&nbsp;Top <%=topVisitors%> more visitors</a>
               </div>
               <div class="col-5 text-center" style="flex:2 1 auto;"> <h3 class="text-center" >Customer Configuration</h3>   <p>( <%=numRows%> )</p> </div>
               <div class="col-4 d-flex" style="flex:2 1 auto;" >    
@@ -19,7 +19,7 @@
       </div>
     </div>
        
-    <div >
+    <div class="table">
         <asp:GridView ID="gvUsers" runat="server" AutoGenerateColumns="false" AllowPaging="True" CssClass="table table-striped"  PageSize="10" 
         OnPageIndexChanging="gv_OnPageIndexChanging"  >
           <PagerSettings Mode="NumericFirstLast" PageButtonCount="4" FirstPageText="First" LastPageText="Last" />
@@ -63,7 +63,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Most frequent visitors:</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Most frequent <%=topVisitors%> visitors:</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

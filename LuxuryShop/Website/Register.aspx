@@ -1,6 +1,23 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="Client.master" AutoEventWireup="true" CodeFile="Register.aspx.cs" Inherits="Website_Register" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" Runat="Server">
+    <style>
+    .frame{         
+        
+        margin: 20px;        
+        position: relative;
+    }    
+    .imgRegister{  
+        max-height: 100%;  
+        max-width: 100%; 
+        position: absolute;  
+        top: 0;  
+        bottom: 0;  
+        left: 0;  
+        right: 0;  
+        margin: auto;
+    }
+</style>
     <div class="row">
     <div class="col-md-6">
         <section id="loginForm">
@@ -59,10 +76,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-3 control-label">Password <br /><span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>  
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-3 control-label">Password <br /><span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();" ondblclick="showDesc();"  onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>  
                         <div class="col-md-9">
-                            <asp:TextBox runat="server" ID="Password" TextMode="Password"  CssClass="form-control" MaxLength="12" />
-                             <span id="passDesc" class="iconDesc">Password criteria:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="#" onClick="hideDesc();" class="linkPass"><i class='fa fa-check'></i></a><br />
+                            <asp:TextBox runat="server" ID="Password" TextMode="Password"  OnClick="showDesc();"  CssClass="form-control" MaxLength="12" />
+                             <span id="passDesc" class="iconDesc">Password criteria:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="#" onClick="hideDesc();"  class="linkPass"><i class='fa fa-check'></i></a><br />
                                 7  Min. Characters length<br />
                                 2  Letters in Upper Case<br />
                                 1  Special Character (!@#$&*)<br />
@@ -70,9 +87,9 @@
                                 3  Letters in Lower Case
                              </span>
                             <asp:RequiredFieldValidator runat="server" ControlToValidate="Password" CssClass="text-danger" ErrorMessage="The password field is required." /><br />
-                            <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server"
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator3"  runat="server"
                                          ErrorMessage="Invalid password structure" ControlToValidate="Password"
-                                         SetFocusOnError="True"  CssClass="text-danger"
+                                         SetFocusOnError="True"  CssClass="text-danger" 
                                          ValidationExpression="^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{7,}$">
                             </asp:RegularExpressionValidator>
                         </div>
@@ -88,16 +105,16 @@
                     
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <asp:Button runat="server"  Text="Register" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="CreateUser_Click" CssClass="btn btn-default" style="float: right" ID="btnSave" />
+                            <asp:Button runat="server"  Text="Register" OnClientClick="if ( Page_ClientValidate() ) {hide();}else hideDesc();" OnClick="CreateUser_Click" CssClass="btn btn-default" style="float: right" ID="btnSave" />
                         </div>
                     </div>
        
         </section>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
+    <div class="col-md-6 Divframe" style="height:500px;" >
+        <section id="socialLoginForm" style="height:100%;position: inherit;" class="frame">
 
-            <img src="../images/Register.jpg" height="400px"/> 
+            <img src="../images/Register.jpg" height="450px" class="imgRegister"/> 
         </section>
     </div>
                 <div class="MessagePanelDiv">

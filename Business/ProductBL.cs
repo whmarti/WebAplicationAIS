@@ -62,11 +62,11 @@ namespace Business
         /// <param name="pType"></param>
         /// <param name="pMError"></param>
         /// <returns></returns>
-        public List<Product> getProductSearchCliente_BL(String pSearch, String pType, int pOffer, ref mError pMError)
+        public List<Product> getProductSearchCliente_BL(String pSearch, String pType, int pOffer, String pOrderBy, String pTypeOrderBy, ref mError pMError)
         {
 
             ProductDA dataAccess = new ProductDA();
-            return dataAccess.getProductClientSearch(pSearch, pType, pOffer, ref pMError);
+            return dataAccess.getProductClientSearch(pSearch, pType, pOffer, pOrderBy,pTypeOrderBy, ref pMError);
 
         }
 

@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Oops : System.Web.UI.Page
+public partial class Error_500 : System.Web.UI.Page
 {
     public string _mError = "";
     protected void Page_Load(object sender, EventArgs e)

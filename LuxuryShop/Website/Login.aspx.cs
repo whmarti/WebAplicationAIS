@@ -21,7 +21,7 @@ public partial class Website_Login : System.Web.UI.Page
     private readonly String cookClient = ConfigurationManager.AppSettings["cookClient"];
     private readonly String cookAddrClient = ConfigurationManager.AppSettings["cookAddrClient"];
     private readonly String sessionClient = ConfigurationManager.AppSettings["sessionClient"];
-    private readonly String stateCliente = ConfigurationManager.AppSettings["stateCliente"];
+    private readonly String stateClient = ConfigurationManager.AppSettings["stateClient"];
     private static readonly String cookDateCreate = ConfigurationManager.AppSettings["cookDateCreate"];
     private string pagErr = "../" + ConfigurationManager.AppSettings["pagError"];
     private mError mError;
@@ -89,7 +89,7 @@ public partial class Website_Login : System.Web.UI.Page
                     Tools.CreateCookie(cookClient, user.name + " " + user.lastName);
                     Tools.CreateCookie(sessionClient, user.IdUser.ToString());
                     Tools.CreateCookie(cookAddrClient, user.address.ToString());
-                    Tools.CreateCookie(stateCliente, user.state.ToString());
+                    Tools.CreateCookie(stateClient, user.state.ToString());
                     _msg = "<strong> Hello " + user.name + " " + user.lastName + " </strong> access successfully! ";
                     ShowMessage(_msg, WarningType.Success);
                     string _script = "$('#cover-spin').hide();";

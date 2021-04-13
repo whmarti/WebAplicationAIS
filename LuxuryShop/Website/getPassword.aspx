@@ -4,7 +4,7 @@
      <div class="row">
     <div class="col-md-9" >
         <section id="loginForm">
-               <h4>Forgot your password?</h4>
+               <h4>Change your password</h4>
                 <hr />                
                     
           
@@ -24,7 +24,7 @@
                    <div class="form-group">
                         <asp:Label runat="server" AssociatedControlID="password" CssClass="col-md-3 control-label">New Password<br /><span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>
                         <div class="col-md-9">
-                            <asp:TextBox runat="server" ID="password" TextMode="Password" CssClass="form-control" />
+                            <asp:TextBox runat="server" ID="password"  onClick="showDesc();" TextMode="Password" CssClass="form-control" />
                              <span id="passDesc" class="iconDesc">Password criteria:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a href="#" onClick="hideDesc();" class="linkPass"><i class='fa fa-check'></i></a><br />
                                 7  Min. Characters length<br />
                                 2  Letters in Upper Case<br />
@@ -47,7 +47,7 @@
 
                     <div class="form-group" style="padding-right:150px;">
                         <div class="col-md-offset-2 col-md-10"> 
-                            <asp:LinkButton runat="server" ID="btnLogin" Text="<i class='fa fa-usb'></i> Update" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="Login_Click" CssClass="btn btn-default" style="float: right;"  />
+                            <asp:LinkButton runat="server" ID="btnLogin" Text="<i class='fa fa-usb'></i> Update" OnClientClick="if ( Page_ClientValidate() ) {hide();}" OnClick="Login_Click" CssClass="btn btn-default" style="float: right;"  /><asp:HiddenField ID="hidValidIdReq" runat="server" />
                         </div>
                     </div>
          </section>

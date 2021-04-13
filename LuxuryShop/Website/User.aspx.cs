@@ -83,6 +83,7 @@ public partial class Admin_User : System.Web.UI.Page
             lastName.Text = user.lastName.Trim();
             email.Text = user.email.Trim();
             phone.Text= user.phone.Trim();
+            state.Value = user.state.Trim();
             address.Text = user.address.Trim();
             pass.Text = Passkey.Trim();
             passwordRe.Text = Passkey.Trim();

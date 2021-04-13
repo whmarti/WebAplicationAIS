@@ -1,6 +1,23 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="Client.master" AutoEventWireup="true" CodeFile="AboutUs.aspx.cs" Inherits="AboutUs" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" Runat="Server">
+    <style>
+    .DivAboutframe{         
+        
+        margin: 20px;        
+        position: relative;
+    }    
+    .imgContact{  
+        max-height: 100%;  
+        max-width: 100%; 
+        position: absolute;  
+        top: 0;  
+        bottom: 0;  
+        left: 0;  
+        right: 0;  
+        margin: auto;
+    }
+</style>
     <div class="row rowInfo">
     <div class="col-md-6">
         <section id="loginForm">
@@ -32,10 +49,10 @@
        
         </section>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
+    <div class="col-md-6 DivAboutframe" style="height:355px;">
+        <section id="socialLoginForm" style="height:100%;position: inherit;" class="frame">
 
-            <img src="images/AboutUs.jpg" height="400px" width ="490"/> 
+            <img src="images/AboutUs.jpg"  width="450px" class="imgContact"/> 
         </section>
     </div>
 </div>

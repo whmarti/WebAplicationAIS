@@ -55,3 +55,14 @@
     display: flex;
     width: 100%;
 }
+
+@media screen and (max-width: 540px) {
+    .car {
+        width: 330px;
+        height: 180px;
+    }
+
+    .container {
+        width: 358px !important;
+    }
+}
