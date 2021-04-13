@@ -24,7 +24,6 @@ This application is designed for academic purposes. It is a web-based solution d
 * N layers pattern
 * Bootstrap CSS framework
 
-
 ## Delivery format
 
 Source code in .Net Framework 4.6.1
