@@ -33,7 +33,7 @@ Source code in .Net Framework 4.6.1
 
 * Database is embeded in App_Data Folder.
 * Scripts are included in Databse_Scripts folder, in case you want to use remote or local server, just switch to the second conexion string.
-* Some passwords are not encrypted for academic evaluation purposes.
+* Some passwords are not encrypted and others do using the SHA-512 secure hashing algorithm for academic evaluation purposes.
 * Configure into web.config file, enviroment variables such as email and paswword to send passwords verifications.
 ```xml
 <add key="admEmail" value="" />    <!--For testing use your own email account-->
