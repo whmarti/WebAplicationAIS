@@ -1,0 +1,1048 @@
+default:
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+    <div class="jumbotron">
+        <h1>Global</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Welcome Mr(s)</h2>
+            <p>
+               <asp:Label ID="lbl_user" runat="server" Text=""></asp:Label>
+            </p>
+            <p>
+               
+            </p>
+        </div>
+       
+    </div>
+
+</asp:Content>
+--------------------
+
+ protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["user"] != null)
+            {
+                if (Session["user"].ToString()!="")
+                  lbl_user.Text = Session["user"].ToString();
+                else Response.Redirect("login.aspx");
+
+            }
+            else Response.Redirect("login.aspx");
+        }
+
+--------------------
+Index:
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        .divRow {
+  display: flex;
+  justify-content: center;
+}
+    </style>
+   <div class="row col-md-12">
+       <div class="row">    
+       <div class="center">
+             <img class="efecto1 center" src="images/Logo.png" alt="" height="auto" width="auto" />
+
+           
+        </div>
+
+          
+        </div>
+         <div class="row divRow">
+                <div class="center">
+                 <table>
+	<tbody>
+		<tr>
+			<td >
+                 <section id="loginForm" style="margin-top: 30px">
+
+                <h4>&raquo;User Credentials</h4>
+                <hr />
+
+                
+                 <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="userId" CssClass="col-md-3 control-label">Id User</asp:Label>
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="userId" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="userId"
+                                CssClass="text-danger" ErrorMessage="The Id User field is required." />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="uName" CssClass="col-md-3 control-label">Name</asp:Label>
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="uName" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="uName"
+                                CssClass="text-danger" ErrorMessage="The name field is required." />
+                        </div>
+                    </div>                
+
+                  
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-3 control-label">Password <br /><span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>  
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" MaxLength="12" />
+                           
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password" CssClass="text-danger" ErrorMessage="The password field is required." /><br />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server"
+                                         ErrorMessage="Invalid password structure" ControlToValidate="Password"
+                                         SetFocusOnError="True"  CssClass="text-danger"
+                                         ValidationExpression="^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{7,}$">
+                            </asp:RegularExpressionValidator>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-3 control-label">Re-Password</asp:Label>
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="PasswordRe" TextMode="Password" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="PasswordRe" CssClass="text-danger" ErrorMessage="The password confirmation field is required." /><br />
+                            <asp:CompareValidator runat="server" id="cmpPasswords" controltovalidate="Password" CssClass="text-danger" controltocompare="PasswordRe" operator="Equal" type="String" errormessage="The Password should be equal than the Re-Password!" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">                            
+                            <asp:Button runat="server"  Text="Register &raquo;"  OnClick="CreateUser_Click" CssClass="btn btn-default col-lg-12"  ID="btnSave" />
+                            <br /><br /><asp:Label ID="res_BD" runat="server" Text=""></asp:Label>
+                        </div>
+                    </div>
+
+
+            </section>
+            </td>
+		</tr>
+		<tr>
+			<td > </td>
+		</tr>
+	</tbody>
+</table>
+                </div>
+            </div>
+       <div class="col-md-6">
+          
+        </div>    
+
+   </div>
+
+   
+   
+</asp:Content>
+
+--------------------
+using Assignment.App_Code;
+using System;
+using System.Web.UI;
+
+namespace Assignment
+{
+    public partial class Index : System.Web.UI.Page
+    {
+        // UserDA userDA;
+        Assignment.App_Code.User user;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Function that invokes the logic layer to insert the registry.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void CreateUser_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Page.IsValid)
+                {
+                    String msg = "<strong> User </strong>  logged in <strong> successfully! </strong>";
+                    //int userId;
+                    String oper = "INS", mError="", res = "0";
+                    //User user = new User(0,"","","");
+                    Assignment.App_Code.User user = new Assignment.App_Code.User();
+                    user.name = uName.Text.Trim();
+                    user.userId = userId.Text.Trim();
+                    user.pass = Password.Text.Trim();
+                    btnSave.Enabled = false;
+                    UserDA userDA = new UserDA();
+                    res = userDA.CRUDUser(user, oper,ref  mError).ToString();
+                    if (res == "1")
+                    {
+                        res_BD.ForeColor = System.Drawing.Color.Red;
+                        msg = "<strong> Error! </strong> " + mError;
+                        btnSave.Enabled = true;
+                    }
+                    else
+                    {
+                        res_BD.ForeColor = System.Drawing.Color.Green;
+                        msg = "<strong> User registered.  </strong>";
+                        Session["user"] = user.name.ToUpper();
+                        Response.AddHeader("REFRESH", "4;URL='Default.aspx'");
+                    }
+                    
+                    res_BD.Text = msg;
+                }
+            }
+            catch (Exception ex)
+            {
+                res_BD.ForeColor = System.Drawing.Color.Red;
+                res_BD.Text=ex.InnerException.Message;
+            }
+           
+        }
+        
+
+    }
+}
+
+
+
+--------------------
+Login:
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+     <div class="row col-md-12">
+       <div class="row">    
+       <div class="center">
+             <img class="efecto1 center" src="images/Logo.png" alt="The best in sport articles" height="auto" width="auto" />
+
+           
+        </div>
+
+          
+        </div>
+         <div class="row divRow">
+                <div class="center">
+                 <table style="width:100%">
+	<tbody>
+		<tr>
+			<td >
+                 <section id="loginForm" style="margin-top: 30px">
+
+                <h4>»Log in</h4>
+                <hr />
+
+                
+                 <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="userId" CssClass="col-md-5 control-label">Id User</asp:Label>
+                        <div class="col-md-7">
+                            <asp:TextBox runat="server" ID="userId" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="userId"
+                                CssClass="text-danger" ErrorMessage="The Id User field is required." />
+                        </div>
+                    </div>
+
+                   
+                  
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-5 control-label">Password <br /><span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>  
+                        <div class="col-md-7">
+                            <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" MaxLength="12" />
+                           
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password" CssClass="text-danger" ErrorMessage="The password field is required." /><br />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server"
+                                         ErrorMessage="Invalid password structure" ControlToValidate="Password"
+                                         SetFocusOnError="True"  CssClass="text-danger"
+                                         ValidationExpression="^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{7,}$">
+                            </asp:RegularExpressionValidator>
+                        </div>
+                    </div>                  
+                    
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-12">                            
+                            <asp:Button runat="server"  Text="Login &raquo;"  OnClick="LoginUser_Click" CssClass="btn btn-default col-md-12"  ID="btnLog" />
+                            <br /><br /><asp:Label ID="res_Log" runat="server" Text=""></asp:Label>
+                        </div>
+                    </div>
+
+
+            </section>
+            </td>
+		</tr>
+		<tr>
+			<td > </td>
+		</tr>
+	</tbody>
+</table>
+                </div>
+            </div>
+       <div class="col-md-6">
+          
+        </div>    
+
+   </div>
+</asp:Content>
+
+
+--------------------
+
+using Assignment.App_Code;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Assignment
+{
+    public partial class Login : System.Web.UI.Page
+    {
+        private String acc = "";
+        Assignment.App_Code.User user;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            acc = Request.QueryString["acc"] != "" ? Request.QueryString["acc"] : acc;
+
+            if (acc == "out")
+            {
+                Session["user"] = "";
+            }
+            else
+            {
+                if(Session["user"] != null)
+                    if (Session["user"] != "") Response.Redirect("default.aspx");
+
+            }
+        }
+
+        protected void LoginUser_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Page.IsValid)
+                {
+                    String msg = "<strong> User </strong>  logged in <strong> successfully! </strong>";
+                    //int userId;
+                    String oper = "INS", mError = "", res = "0";
+                    user = new Assignment.App_Code.User();
+                    user.IdUser = 0;
+                    user.name = "";
+                    user.userId = userId.Text.Trim();
+                    user.pass = Password.Text.Trim();
+                    btnLog.Enabled = false;
+                    UserDA userDA = new UserDA();
+                    user = userDA.getUserLoginBL(userId.Text.Trim(), Password.Text.Trim(), ref mError);
+                    res = mError;
+                    //msg = "User registered.";
+                    if (res != "0")
+                    {
+                        res_Log.ForeColor = System.Drawing.Color.Red;
+                        msg = "<strong> Error! </strong> " + mError;
+                        //ShowMessage(_msg, WarningType.Danger);
+                        btnLog.Enabled = true;
+                    }
+                    else
+                    {
+                        res_Log.ForeColor = System.Drawing.Color.Green;
+                        msg = "<strong> User Log in.  </strong>";
+                        Session["user"] = user.name.ToUpper();
+                        Response.AddHeader("REFRESH", "4;URL='Default.aspx'");
+                    }
+
+                    res_Log.Text = msg;
+                }
+            }
+            catch (Exception ex)
+            {
+                res_Log.ForeColor = System.Drawing.Color.Red;
+                res_Log.Text = ex.InnerException.Message;
+            }
+
+        }
+
+    }
+}
+
+--------------------
+Site:
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> Evaluation</title>
+    <link href="styles/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" runat="server" href="~/">AIS</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a runat="server" href="~/">Home</a></li>
+                        <li><a runat="server" href="~/Login.aspx">Login</a></li>
+                        <li><a runat="server" href="~/Index.aspx">Register</a></li>
+                        <li><a runat="server" href="~/Users.aspx">Users</a></li>
+                        <li><a runat="server" href="~/Login.aspx?acc=out">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+       <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+           
+        </div>
+
+    </form>
+    <div class="row">
+      <hr />
+            <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Evaluation</p>
+            </footer>
+    </div>
+</body>
+</html>
+
+
+--------------------
+User:
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+     <style>
+        .divRow {
+  display: flex;
+  justify-content: center;
+}
+    </style>
+   <div class="row col-md-12">
+       <div class="row">    
+       <div class="center">
+             <img class="efecto1 center" src="images/Logo.png" alt="" height="auto" width="auto" />
+
+           
+        </div>
+
+          
+        </div>
+         <div class="row divRow">
+                <div class="center">
+                 <table>
+	<tbody>
+		<tr>
+			<td >
+                 <section id="loginForm" style="margin-top: 30px">
+
+                <h4>&raquo;User Credentials</h4>
+                <hr />
+<asp:HiddenField id="IdUser" runat="server" />
+                
+                 <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="userId" CssClass="col-md-3 control-label">Id User</asp:Label>
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="userId" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="userId"
+                                CssClass="text-danger" ErrorMessage="The Id User field is required." />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="uName" CssClass="col-md-3 control-label">Name</asp:Label>
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="uName" CssClass="form-control" />
+                            <asp:RequiredFieldValidator runat="server" ControlToValidate="uName"
+                                CssClass="text-danger" ErrorMessage="The name field is required." />
+                        </div>
+                    </div>                
+
+                  
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-3 control-label">Password <br /><span style="font-size:smaller">(see criteria&nbsp&nbsp<a href="#" onmouseover="showDesc();"   onClick="hideDesc();" class="linkPass"><i class='fa fa-eye'></i></a>)</span></asp:Label>  
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" MaxLength="12" />
+                           
+                              <br />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server"
+                                         ErrorMessage="Invalid password structure" ControlToValidate="Password"
+                                         SetFocusOnError="True"  CssClass="text-danger"
+                                         ValidationExpression="^(?=(.*[a-z]){3,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$%^&*()\-__+.]){1,}).{7,}$">
+                            </asp:RegularExpressionValidator>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-3 control-label">Re-Password</asp:Label>
+                        <div class="col-md-9">
+                            <asp:TextBox runat="server" ID="PasswordRe" TextMode="Password" CssClass="form-control" />
+                           
+                            
+                            <br />
+                            <asp:CompareValidator runat="server" id="cmpPasswords" controltovalidate="Password" CssClass="text-danger" controltocompare="PasswordRe" operator="Equal" type="String" errormessage="The Password should be equal than the Re-Password!" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">                            
+                            <asp:Button runat="server"  Text="Update &raquo;"  OnClick="UpdateUser_Click" CssClass="btn btn-default col-lg-12"  ID="btnSave" />
+                            <br /><br /><asp:Label ID="res_BD" runat="server" Text=""></asp:Label>
+                        </div>
+                    </div>
+
+
+            </section>
+            </td>
+		</tr>
+		<tr>
+			<td > </td>
+		</tr>
+	</tbody>
+</table>
+                </div>
+            </div>
+       <div class="col-md-6">
+          
+        </div>    
+
+   </div>
+
+</asp:Content>
+
+
+--------------------
+  public partial class User : System.Web.UI.Page
+    {
+        Assignment.App_Code.User user;
+        Assignment.App_Code.UserDA userDA; 
+       String mError = "";
+       private readonly String _pass = ConfigurationManager.AppSettings["Passkey"];
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Request.QueryString["Id"] != null)
+            {
+                if (Request.QueryString["Id"] != "")
+                    FillData(Convert.ToInt32(Request.QueryString["Id"]));
+                else Response.Redirect("users.aspx");
+
+            }
+            else Response.Redirect("users.aspx");
+        }
+
+        protected void UpdateUser_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Page.IsValid)
+                {
+                    String msg = "<strong> User </strong>  logged in <strong> successfully! </strong>";
+                    //int userId;
+                    String oper = "UPD", mError = "", res = "0";
+
+                    user.name = uName.Text.Trim();
+                    user.userId = userId.Text.Trim();
+                    user.pass = _pass;
+                    if (Password.Text != "" && Password.Text != _pass)
+                    user.pass = Password.Text.Trim();
+                   // btnSave.Enabled = false;
+                    userDA = new Assignment.App_Code.UserDA();
+                    res = userDA.CRUDUser(user, oper, ref mError).ToString();
+                    if (res == "1")
+                    {
+                        res_BD.ForeColor = System.Drawing.Color.Red;
+                        msg = "<strong> Error! </strong> " + mError;
+                        btnSave.Enabled = true;
+                    }
+                    else
+                    {
+                        res_BD.ForeColor = System.Drawing.Color.Green;
+                        msg = "<strong> User updated.  </strong>";
+                        Session["user"] = user.name.ToUpper();
+                     //   Response.AddHeader("REFRESH", "2;URL='Default.aspx'");
+                    }
+
+                    res_BD.Text = msg;
+                }
+            }
+            catch (Exception ex)
+            {
+                res_BD.ForeColor = System.Drawing.Color.Red;
+                res_BD.Text = ex.InnerException.Message;
+            }
+
+        }
+
+        protected void FillData(int pIdUser)
+        {
+            userDA = new Assignment.App_Code.UserDA();
+            user = userDA.getUser(pIdUser, ref mError);
+            String msg = "";
+            if (user != null)
+            {
+                IdUser.Value = user.IdUser.ToString();
+                userId.Text = user.userId.ToString();
+                uName.Text = user.name.Trim();
+                Password.Text = _pass;
+                PasswordRe.Text = _pass;
+            }
+            else
+            {
+                msg = "<strong> Error! </strong> The user is not available.";
+                res_BD.ForeColor = System.Drawing.Color.Red;
+                res_BD.Text = msg;
+            }
+        }
+
+    }
+
+
+--------------------
+Entity user:
+ public int IdUser { get; set; }
+        public String userId { get; set; }
+        public String name { get; set; }
+        public String pass { get; set; }
+
+
+--------------------
+public class UserDA
+    {
+        private String strConn = ConfigurationManager.AppSettings["DataBase"].ToString();
+        private  String EncryptClient = ConfigurationManager.AppSettings["EncryptClient"];
+        private  String Passkey = ConfigurationManager.AppSettings["Passkey"];
+        
+
+            /// <summary>
+            /// Request for User table information to the Data Base.
+            /// </summary>
+            /// <param name="pMError"></param>
+            /// <returns></returns>
+            public List<User> getUsers( ref String mError )
+        {
+            List<User> _users = null;
+            SqlDataReader _rstReader = null;
+            string _sql = "select * from UserMega";
+
+            try
+            {
+                using (SqlConnection _conn = new SqlConnection(strConn))
+                {
+                    SqlCommand cmd = new SqlCommand(_sql, _conn);
+                    _conn.Open();
+                    _rstReader = cmd.ExecuteReader();
+                    _users = new List<User>();
+                    while (_rstReader.Read())
+                    {
+
+                        Assignment.App_Code.User _newUser = new Assignment.App_Code.User();
+                        _newUser.IdUser = 0;
+                        _newUser.name = "";
+                        _newUser.userId = "";
+                        _newUser.pass = "";
+
+                        _newUser.IdUser = Convert.ToInt32(_rstReader["IdUser"]);
+                        _newUser.userId = Convert.ToString(_rstReader["userId"]).Trim();
+                        _newUser.name = Convert.ToString(_rstReader["name"]).Trim();
+                        //_newUser.pass = Convert.ToString(_rstReader["pass"]).Trim();      
+                        _users.Add(_newUser);
+
+                    }
+                    _rstReader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                mError = ex.Message;
+            }
+            return _users;
+        }
+
+
+   
+        /// <summary>
+        /// Function to authenticate the credentials of a user who intends to enter the system.
+        /// </summary>
+        /// <param name="pUser"></param>
+        /// <param name="pPass"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public User getUserLoginBL(String pUser, String pPass, ref String mError  )
+        {
+            Assignment.App_Code.User _user = null;
+            SqlDataReader _rstReader = null;
+            string _sql = "select * from UserMega where userId=@User and pass=HASHBYTES('SHA2_512', @pass+CAST(@salt AS NVARCHAR(36))) ";
+
+            try
+            {
+                using (SqlConnection _conn = new SqlConnection(strConn))
+                {
+                    SqlCommand _cmd = new SqlCommand(_sql, _conn);
+                    _cmd.Parameters.AddWithValue("@User", pUser);
+                    _cmd.Parameters.AddWithValue("@pass", pPass);
+                    _cmd.Parameters.AddWithValue("@salt", EncryptClient);
+                    _conn.Open();
+                    _rstReader = _cmd.ExecuteReader();
+                    if (_rstReader.Read())
+                    {
+
+                        _user = new Assignment.App_Code.User();
+                        _user.IdUser = Convert.ToInt32(_rstReader["IdUser"]);
+                        _user.userId = Convert.ToString(_rstReader["userId"]).Trim();
+                        _user.name = Convert.ToString(_rstReader["name"]).Trim();
+                        mError = "0";
+                        //_user.pass = Convert.ToString(_rstReader["pass"]).Trim();
+                        // _user.date = Convert.ToString(_rstReader["date"]).Trim();
+
+                    }
+                    else
+                    {
+                        mError ="Incorrect credentials, try again.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mError = ex.Message;
+            }
+            return _user;
+
+        }
+
+        /// <summary>
+        /// Request for information on a specific user.
+        /// </summary>
+        /// <param name="pIdUser"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public User getUser(int pIdUser, ref String mError )
+        {
+            Assignment.App_Code.User _user = new Assignment.App_Code.User();
+            _user.IdUser = 0;
+            _user.name = "";
+            _user.userId = "";
+            _user.pass = "";
+            String _sql = "Select p.* from UserMega p where p.IdUser=@idUser";
+            try
+            {
+                using (SqlConnection _conn = new SqlConnection(strConn))
+                {
+                    SqlCommand _cmd = new SqlCommand(_sql, _conn);
+                    SqlDataReader _rstReader = null;
+                    _cmd.Parameters.AddWithValue("@idUser", pIdUser);
+                    _conn.Open();
+                    _rstReader = _cmd.ExecuteReader();
+                    if (_rstReader.Read())
+                    {
+                        _user.IdUser = Convert.ToInt32(_rstReader["IdUser"]);
+                        _user.userId = Convert.ToString(_rstReader["userId"]);
+                        _user.name = Convert.ToString(_rstReader["name"]).Trim();                       
+                        _user.pass = Passkey;// Convert.ToString(_rstReader["password"]).Trim();
+                      
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                mError = ex.Message;
+            }
+            return _user;
+
+        }
+
+        /// <summary>
+        /// Function to persist data in the User table.
+        /// </summary>
+        /// <param name="pUser"></param>
+        /// <param name="pOper"></param>
+        /// <param name="pMError"></param>
+        /// <returns></returns>
+        public int CRUDUser(User pUser, String pOper,ref String  mError)
+        {
+            string _sql = "Sproc_CRUD_UserMega";
+            string _strOut = "@P_Mensaje", _res = "";
+            int _pos = 0;
+            SqlParameter[] sqlParams;
+            sqlParams = new SqlParameter[]
+            {
+                    new SqlParameter { ParameterName = "@IdUser",  Value = pUser.IdUser, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@userId",  Value = pUser.userId, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@name",  Value = pUser.name, Direction = System.Data.ParameterDirection.Input },                   
+                    new SqlParameter { ParameterName = "@pass",  Value = pUser.pass, Direction = System.Data.ParameterDirection.Input },
+                   new SqlParameter { ParameterName = "@salt",  Value = EncryptClient, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@passkey",  Value = Passkey, Direction = System.Data.ParameterDirection.Input },
+                    new SqlParameter { ParameterName = "@oper",  Value = pOper, Direction = System.Data.ParameterDirection.Input },
+
+                    new SqlParameter(_strOut, SqlDbType.NChar) { Size = 300, Direction = System.Data.ParameterDirection.Output }
+
+            };
+
+            try
+            {
+                using (SqlConnection _conn = new SqlConnection(strConn))
+                {
+                    SqlCommand cmd = new SqlCommand(_sql, _conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    foreach (var item in sqlParams)
+                    {
+                        cmd.Parameters.Add(item);
+                    }
+
+
+                    _conn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    _res = cmd.Parameters[_strOut].Value.ToString();
+                    _conn.Close();
+                    _pos = _res.IndexOf("1;", 0);
+                    if (_pos >= 0)
+                    {
+                        mError =  _res.Substring(2);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mError = ex.Message;
+            }
+            return _pos;
+        }
+
+    }
+
+--------------------
+Users:
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
+      <div class="row col-md-12">
+
+       <div class="row">    
+
+       <div class="center">
+
+            
+
+            <asp:GridView ID="gvCategories" runat="server" AutoGenerateColumns="false"  AllowPaging="True" CssClass="table table-striped"  PageSize="10" 
+        OnPageIndexChanging="gv_OnPageIndexChanging"   >
+       <PagerSettings Mode="NumericFirstLast" PageButtonCount="4" FirstPageText="First" LastPageText="Last" />
+           <pagerstyle backcolor="#e3f4fa"
+          height="30px"
+          verticalalign="Bottom"
+          horizontalalign="Center"
+               CssClass="cssPager" 
+               />
+        <Columns>         
+         <asp:HyperLinkField DataTextField="name" DataNavigateUrlFields="IdUser" DataNavigateUrlFormatString="User.aspx?Id={0}" ItemStyle-Width = "90%" HeaderText="Name <i class='fas fa-edit'></i>" />       
+         <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText=""><HeaderTemplate><center><i class='fas fa-trash'></i>&nbspDelete</center></HeaderTemplate>
+            <ItemTemplate>
+                <asp:LinkButton ID="Del" CommandArgument='<%#  Bind("IdUser") %>'  Text="<i class='fas fa-eraser'></i>" runat="server" OnClientClick="return confirm('Are you sure want to delete the current record ?')" OnClick="gvRemCategories_Click" ItemStyle-Width = "1" />
+            </ItemTemplate>
+         </asp:TemplateField>
+         
+       
+    </Columns>
+    </asp:GridView>
+        
+
+           
+
+        </div>
+
+
+
+           <br /><br /><asp:Label ID="res_lst" runat="server" Text=""></asp:Label>
+
+        </div>
+
+
+
+    </div>
+
+</asp:Content>
+
+
+
+
+--------------------
+public partial class Users : System.Web.UI.Page
+    {
+        public String numRows = "", mError = "";
+        private UserDA userDA;
+        Assignment.App_Code.User user;
+        private String pagErr = "Default.aspx";
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!IsPostBack)
+                {
+                    FillData();
+                }
+            }
+            catch (Exception ex)
+            {
+                //res_BD.ForeColor = System.Drawing.Color.Red;
+                //res_BD.Text = ex.InnerException.Message;
+                Response.Redirect("Index.aspx");
+            }
+        }
+
+        protected void FillData()
+        {
+            userDA = new UserDA();
+            System.Collections.Generic.List<Assignment.App_Code.User> _dt = userDA.getUsers(ref mError);
+            if (_dt != null)
+            {
+                if (_dt.Count > 0)
+                {
+                    gvCategories.DataSource = _dt;
+                    gvCategories.DataBind();
+                    numRows = " " + _dt.Count() + " Rows";
+                }
+                else
+                {
+                    gvCategories.DataSource = null;
+                    gvCategories.DataBind();
+                    numRows = " ";
+                }
+            }
+            else
+            {
+                gvCategories.DataSource = null;
+                gvCategories.DataBind();
+                numRows = " ";
+            }
+        }
+
+        protected void gvRemCategories_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)(sender);
+            DeleteData(Convert.ToInt32(btn.CommandArgument));
+            FillData();
+        }
+
+        protected void DeleteData(int pId)
+        {
+            String msg = "";
+            String oper = "DEL", mError = "", res = "0";
+            try
+            {
+                userDA = new UserDA();
+                user = new Assignment.App_Code.User();
+                user.IdUser = pId;
+                user.name = "";
+                user.userId = "1";
+                user.pass = "";
+                res = userDA.CRUDUser(user, oper, ref mError).ToString();
+                if (res == "1")
+                {
+                    res_lst.ForeColor = System.Drawing.Color.Red;
+                    msg = "<strong> Error! </strong> " + mError;
+                }
+                else
+                {
+                    res_lst.ForeColor = System.Drawing.Color.Green;
+                    msg = "<strong> User </strong> deleted <strong> successfully! </strong>";
+                }
+                res_lst.Text = msg;
+                //Response.AddHeader("REFRESH", "6;URL='Users.aspx'");
+
+            }
+            catch (Exception ex)
+            {
+                res_lst.ForeColor = System.Drawing.Color.Red;
+                res_lst.Text = ex.InnerException.Message;
+            }
+        }
+
+        protected void gv_OnPageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            String msg = "";
+            try
+            {
+                gvCategories.PageIndex = e.NewPageIndex;
+                Session["PageIndexCat"] = e.NewPageIndex;
+                FillData();
+                //if (mError != "0")
+                //{                    
+                //    msg = "<strong> Error  DB: </strong> " + mError;
+                //    throw new Exception("Error DB: " + mError);
+                //}
+            }
+            catch (Exception ex)
+            {
+                res_lst.ForeColor = System.Drawing.Color.Red;
+                res_lst.Text = ex.InnerException.Message;
+            }
+        }
+
+
+
+    }
+
+
+--------------------
+webcg:
+
+<configuration>
+
+  <appSettings>
+
+    <add key="DataBase" value="Data Source=(local);Initial Catalog=Sports;Uid=sa;Pwd=wh" />
+    
+    <add key="EncryptClient" value="896B5132-00A4-4E1F-BCF7-E8178FC39A30" />
+    <add key="Passkey" value="Pa$w0rd77" />
+    </appSettings>
+  <system.web>
+
+ <add key="DataBase" value="Data Source=LuxuryAcc.mssql.somee.com;Initial Catalog=LuxuryAcc;Uid=whmartin22_SQLLogin_1;Pwd=79u55xa13m" />
+--------------------
+
+
+
+--------------------
+
+
+--------------------
+
+
+
+--------------------
+
+
+
+--------------------
